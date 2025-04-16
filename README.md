@@ -143,6 +143,43 @@ Como se detalla en párrafos anteriores estos requisitos son mínimos luego pued
 
 **Modelo de Datos Mínimo** 
 
+Usuatios
+    -cosUsuario: int
+    -nombreUsuario (mail del administrador, del dueño del local o del cliente): string(100)
+    -claveUsuario: string(8)
+    -tipoUsuario ("administrador","dueño de local","cliente"): string(15)
+    -categoriaCliente (se completa solo si el usuario es "cliente", y sus calores pueden ser "Inicial", "Medium","Premium"): string(10) 
+
+Novedades
+    -cosNovedad: int
+    -textoNovedad: string(200)
+    -fechaDesdeNovedad: date
+    -fechahastaNovedad: date
+    -tipoUsuario ("administrador","dueño de local","cliente"): string(15)
+
+Promociones
+    -cosPromo: int
+    -textoPromo: string(200)
+    -fechadesdePromo: date
+    -fechahastaPromo: date
+    -categoriaCliente ( "Inicial", "Medium","Premium"): string(10) 
+    -diasSemana: arrau [0,6] int
+    -estadoPromo ("pendiente", "aprovada", "denegada"): string(10)
+    -cosLocal: int
+
+Locales
+    -cosLocal: int
+    -nombreLocal: string(100)
+    -ubicacionLocal: string(50)
+    -rubroLocal("indumentaria", "perfumeria", "optica", "comida", etc): string(20)
+    -cosUsuario (codUsuario de tipo "dueño ñocas"): int
+
+Uso_Promociones
+    -cosCliente (cosUsuarios de tipo "cliente"): int
+    -cosPromo: int
+    -fechaUso Promo: date
+    -estado ("enviada", "aceptada", "rechazada"): string(10)
+
 ![](Aspose.Words.da2fbb18-004a-4a09-8a66-40d876837536.003.jpeg)
 
 El modelo de datos presentado es el mínimo indispensable para desarrollar el sitio web, luego los desarrolladores tienen la  posibilidad de incrementar la cantidad de tablas, agregar bases de datos adicionales y atributos según las necesidades de implementación. 
