@@ -1,0 +1,13 @@
+body {
+    background-image: url('fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+#register-box {
+    margin-top: 50px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+}

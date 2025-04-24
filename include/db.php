@@ -1,15 +1,13 @@
 <?php
 $host = "localhost";
 $usuario = "root";
-$contrasena = ""; 
+$contrasena = "donato"; 
 $basededatos = "dbweb"; 
 
-$conn = new mysqli($host, $usuario, $contrasena, $basededatos);
+$conn = new mysqli($host, $usuario, $contrasena, $basededatos,3307);
 
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
-
-$conn->set_charset("utf8");
 
 ?>
