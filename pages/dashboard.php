@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../php-jwt-token/php-jwt-login/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 $key ='MESSI';
@@ -16,14 +16,48 @@ if(isset($_COOKIE['token'])){
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Shopping Promos - Inicio</title>
 </head>
 <body>
-    <h1>Bienvenido a tu dashboard<b><?php echo $decoded->data->emailUser; ?></b></h1>
-    <a href="logout.php">Cerrar sesión</a>
+    <header>
+        <h1>Bienvenidos a Shopping Promos</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="promociones.html">Promociones</a></li>
+                <li><a href="novedades.html">Novedades</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Promociones Destacadas</h2>
+            <article>
+                <h3>Descuento en Tienda A</h3>
+                <p>20% de descuento en toda la tienda hasta el 30 de abril.</p>
+            </article>
+            <article>
+                <h3>Promo 2x1 en Comidas</h3>
+                <p>Válido de lunes a miércoles en Patio de Comidas.</p>
+            </article>
+        </section>
+
+        <section>
+            <h2>Novedades</h2>
+            <ul>
+                <li>Nuevo local de tecnología abrió en el segundo piso.</li>
+                <li>Horarios especiales por feriado este fin de semana.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Shopping Promos. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
