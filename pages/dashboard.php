@@ -20,20 +20,11 @@ if(isset($_COOKIE['token'])){
 <head>
     <meta charset="UTF-8">
     <title>Shopping Promos - Inicio</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap-css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style-header.css">
 </head>
 <body>
-    <header>
-        <h1>Bienvenidos a Shopping Promos</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="promociones.html">Promociones</a></li>
-                <li><a href="novedades.html">Novedades</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-            </ul>
-        </nav>
-    </header>
-
+    <?php include'header.php'; ?>
     <main>
         <section>
             <h2>Promociones Destacadas</h2>
@@ -59,5 +50,6 @@ if(isset($_COOKIE['token'])){
     <footer>
         <p>&copy; 2025 Shopping Promos. Todos los derechos reservados.</p>
     </footer>
+    <script src="../assets/js/bootstrap-js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
