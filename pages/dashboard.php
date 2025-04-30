@@ -1,16 +1,16 @@
 <?php
-session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-$key ='MESSI';
-if(isset($_COOKIE['token'])){
-    $token = $_COOKIE['token'];
-    $decoded = JWT::decode($token, new Key($key, 'HS256'));
-}else{
-    header('Location: login.php');
-    exit();
-}
+// session_start();
+// require_once __DIR__ . '/../vendor/autoload.php';
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
+// $key ='MESSI';
+// if(isset($_COOKIE['token'])){
+//     $token = $_COOKIE['token'];
+//     $decoded = JWT::decode($token, new Key($key, 'HS256'));
+// }else{
+//     header('Location: login.php');
+//     exit();
+// }
 
 
 ?>
@@ -37,7 +37,6 @@ if(isset($_COOKIE['token'])){
                 <p>Válido de lunes a miércoles en Patio de Comidas.</p>
             </article>
         </section>
-
         <section>
             <h2>Novedades</h2>
             <ul>

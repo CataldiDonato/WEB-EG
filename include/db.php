@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $usuario = "root";
-$contrasena = ""; 
+$contrasena = "donato"; 
 $basededatos = "dbweb"; 
 
 $conn = new mysqli($host, $usuario, $contrasena, $basededatos,3307);

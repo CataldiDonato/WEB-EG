@@ -43,16 +43,18 @@ if (isset($_POST['submit'])) {
     if (count($errors) === 0) { 
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $validado = 0;
-        $aprobado = 0; 
+        $aprobado = 0;
+        $tokenValidacionCorreo = bin2hex(random_bytes(32)); 
+
         if ($tipoUsuario =="cliente"){
             $categoria = "Inicial";
         }else{
             $categoria = "Dueño";
         }
-        $sql_insert = "INSERT INTO usuarios (emailUser, pasUser, tipoUser, validado, fechaIngreso, categoriaUser, aprobado)
-               VALUES (?, ?, ?, ?, NOW(), ?, ?)";
+        $sql_insert = "INSERT INTO usuarios (emailUser, pasUser, tipoUser, validado, fechaIngreso, categoriaUser, aprobado, tokenValidacionCorreo)
+               VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
-        $stmt->bind_param("sssisi", $email, $password_hash, $tipoUsuario, $validado, $categoria, $aprobado);
+        $stmt->bind_param("sssisis", $email, $password_hash, $tipoUsuario, $validado, $categoria, $aprobado, $tokenValidacionCorreo);
 
         if ($stmt->execute()) {
             echo "Usuario registrado con éxito.";
