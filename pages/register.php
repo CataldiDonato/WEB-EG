@@ -1,6 +1,11 @@
 <?php
 
 include '../include/db.php';
+require '../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+$mail = new PHPMailer(true);
 
 if (isset($_POST['submit'])) {
     $email = $_POST['email'] ?? '';
@@ -21,7 +26,7 @@ if (isset($_POST['submit'])) {
         $errors[] = "La contraseña debe tener al menos 8 caracteres.";
     }
 
-    $sql_check = "SELECT * FROM usuarios WHERE emailUser = ?";
+    $sql_check = "SELECT * FROM users WHERE emailUser = ?";
     $stmt = $conn->prepare($sql_check);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -48,18 +53,45 @@ if (isset($_POST['submit'])) {
 
         if ($tipoUsuario =="cliente"){
             $categoria = "Inicial";
+            $tipoUsuario = 2;
         }else{
             $categoria = "Dueño";
+            $tipoUsuario = 1;
         }
-        $sql_insert = "INSERT INTO usuarios (emailUser, pasUser, tipoUser, validado, fechaIngreso, categoriaUser, aprobado, tokenValidacionCorreo)
+        $sql_insert = "INSERT INTO users (id_tipo, emailUser, pasUser, validado, fechaIngreso, categoriaUser, aprobado, tokenValidacionCorreo)
                VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
-        $stmt->bind_param("sssisis", $email, $password_hash, $tipoUsuario, $validado, $categoria, $aprobado, $tokenValidacionCorreo);
+        $stmt->bind_param("sssisis", $tipoUsuario, $email, $password_hash,  $validado, $categoria, $aprobado, $tokenValidacionCorreo);
 
         if ($stmt->execute()) {
-            echo "Usuario registrado con éxito.";
-            header("Location: login.php");
-            exit();
+            try {
+                // Configuración del servidor
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'donatocataldicode@gmail.com'; // Tu Gmail
+                $mail->Password   = 'qqrd dkot mtzu gtio'; // Ver abajo
+                $mail->SMTPSecure = 'tls';
+                $mail->Port       = 587;
+            
+                // Remitente y destinatario
+                $mail->setFrom('donatocataldicode@gmail.com', 'Nombre del Sitio');
+                $mail->addAddress($email); // Por ejemplo, el email del usuario registrado
+            
+                // Contenido
+                $mail->isHTML(true);
+                $mail->Subject = 'Valida tu cuenta';
+                $mail->Body    = "Hola,<br><br>Haz clic en el siguiente enlace para validar tu correo:<br><br>
+                                  <a href='http://tusitio.com/validar.php?email=$email&token=$tokenValidacionCorreo'>
+                                  Validar cuenta</a>";
+            
+                $mail->send();
+                header("Location: login.php");
+                exit();
+            } catch (Exception $e) {
+                echo "Error al enviar correo: {$mail->ErrorInfo}";
+                exit();
+            }
         } else {
             echo "Error al registrar: " . $stmt->error;
         }

@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
     if (empty($email) || empty($password)) {
         $error = '<div class="alert alert-danger">Por favor, complete todos los campos.</div>';
     } else {
-        $sql = "SELECT * FROM usuarios WHERE emailUser = ?";
+        $sql = "SELECT * FROM users WHERE emailUser = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();

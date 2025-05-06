@@ -8,7 +8,7 @@ if(isset($_COOKIE['token'])){
     $token = $_COOKIE['token'];
     $decoded = JWT::decode($token, new Key($key, 'HS256'));   
 }
-$sql_check = "SELECT * FROM usuarios WHERE emailUser = ?";
+$sql_check = "SELECT * FROM users WHERE emailUser = ?";
 $stmt = $conn->prepare($sql_check);
 $stmt->bind_param("s", $decoded->data->emailUser);
 $stmt->execute();
