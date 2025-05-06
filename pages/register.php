@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
                VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
         $stmt->bind_param("sssisis", $tipoUsuario, $email, $password_hash,  $validado, $categoria, $aprobado, $tokenValidacionCorreo);
-
+        //
         if ($stmt->execute()) {
             try {
                 // Configuración del servidor
