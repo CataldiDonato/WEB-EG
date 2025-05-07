@@ -36,4 +36,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codLocal'])) {
     <a href="gestion-locales.php">Volver</a>
 </body>
 </html>
-<?php
