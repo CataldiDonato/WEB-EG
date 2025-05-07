@@ -46,18 +46,18 @@ $resultado = $conn->query($sql);
         <tbody>
             <?php while ($local = $resultado->fetch_assoc()) { ?>
                 <tr>
-                    <td><?= $local['codLocal'] ?></td>
+                    <td><?= $local['id'] ?></td>
                     <td><?= $local['nombreLocal'] ?></td>
                     <td><?= $local['ubicacionLocal'] ?></td>
                     <td><?= $local['rubroLocal'] ?></td>
                     <td><?= $local['codUsuario'] ?></td>
                     <td>
                         <form action="eliminar-local.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="codLocal" value="<?= $local['codLocal'] ?>">
+                            <input type="hidden" name="id" value="<?= $local['id'] ?>">
                             <button type="submit">Eliminar</button>
                         </form>
                         <form action="actualizar-local.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="codLocal" value="<?= $local['codLocal'] ?>">
+                            <input type="hidden" name="id" value="<?= $local['id'] ?>">
                             <button type="submit">Actualizar</button>
                         </form>
                     </td>
