@@ -1,23 +1,52 @@
 <?php
 include '../include/db.php';
-require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-$key ='MESSI';
-if(isset($_COOKIE['token'])){
-    $token = $_COOKIE['token'];
-    $decoded = JWT::decode($token, new Key($key, 'HS256'));   
-}
+session_start();
+// // require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
+// //session_start();
+// // use Firebase\JWT\JWT;
+// // use Firebase\JWT\Key;
+// // $key ='MESSI';
+// // if(isset($_COOKIE['token'])){
+// //     $token = $_COOKIE['token'];
+// //     $decoded = JWT::decode($token, new Key($key, 'HS256'));   
+// // }
+// $sql_check = "SELECT * FROM users WHERE emailUser = ?";
+// $stmt = $conn->prepare($sql_check);
+// $stmt->bind_param("s", $_SESSION['emailUser']);
+// $stmt->execute();
+// $resultado = $stmt->get_result();
+// var_dump($usuario);
+// foreach ($usuario as $campo => $valor) {
+//     echo $campo . ": " . $valor . "<br>";
+// }
+// $usuario = $resultado->fetch_assoc();
+
+// // if ($usuario) {
+// //     echo '<pre>';
+// //     var_dump($usuario);  // o print_r($usuario); si prefieres
+// //     echo '</pre>';
+// // } else {
+// //     echo "No se encontraron datos para este usuario.";
+// // }
+
+// if ($usuario['validado'] == 0){
+//     $usuarioValidado = false;
+// } else {
+//     $usuarioValidado = true;
+// }
+
+$email=$_SESSION['emailUser'];
 $sql_check = "SELECT * FROM users WHERE emailUser = ?";
 $stmt = $conn->prepare($sql_check);
-$stmt->bind_param("s", $decoded->data->emailUser);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 $resultado = $stmt->get_result();
-$usuario = $resultado->fetch_assoc();
-if ($usuario['validado'] == 0){
-    $usuarioValidado = false;
+//$usuarioValidado = $usuario['validado'] ;
+if ($resultado->num_rows === 1) {
+    $usuario = $resultado->fetch_assoc();
+    $usuarioValidado = $usuario['validado'];
 } else {
-    $usuarioValidado = true;
+    echo "No se encontró el usuario en la base de datos.";
 }
 
 
@@ -38,9 +67,16 @@ if ($usuario['validado'] == 0){
         <h1>Perfil</h1>
     </div>
     <div>
-        <h2>Bienvenido, <?php echo $decoded->data->emailUser; ?></h2>
-        <p>Tipo de usuario: <?php echo $decoded->data->tipoUser; ?></p>
-        <?php echo $usuarioValidado ? 'Email Validado' : 'Valida tu Email para poder acceder a las promociones'; ?>
+        <h2>Bienvenido, <?php echo $_SESSION['emailUser']; ?></h2>
+        <p>Tipo de usuario: <?php echo $_SESSION['tipoUser']; ?></p>
+        <?php 
+        echo $usuarioValidado ? 'Email Validado' : 'Valida tu Email para poder acceder a las promociones'; 
+        ?><br><br><?php
+        if ($_SESSION["tipoUser"] == 3) {
+            echo '<a href="dueño/menu-dueño.php"><button>Ir a Panel del Dueño</button></a><br><br>';
+            echo '<a href="dueño/mostrarusopromociones.php"><button>Ver uso de promociones</button></a>';
+        }
+        ?>
     </div>
 </body>
 </html>
