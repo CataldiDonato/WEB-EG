@@ -1,10 +1,10 @@
 <?php
 include("../../../include/db.php");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codLocal'])) {
-    $codLocal = $_POST['codLocal'];
-    $stmt = $conn->prepare("SELECT * FROM locales WHERE codLocal = ?");
-    $stmt->bind_param("i", $codLocal);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $id = $_POST['id'];
+    $stmt = $conn->prepare("SELECT * FROM locales WHERE id = ?");
+    $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
     $local = $resultado->fetch_assoc();
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codLocal'])) {
     <h1>Actualizar Local</h1>
 
     <form action="guardar-local.php" method="POST">
-        <input type="hidden" name="codLocal" value="<?= $local['codLocal'] ?>">
+        <input type="hidden" name="id" value="<?= $local['id'] ?>">
 
         <input type="text" name="nombreLocal" value="<?= $local['nombreLocal'] ?>" required>
         <input type="text" name="ubicacionLocal" value="<?= $local['ubicacionLocal'] ?>" required>
