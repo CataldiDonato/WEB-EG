@@ -52,25 +52,26 @@ if (isset($_POST['submit'])) {
         $tokenValidacionCorreo = bin2hex(random_bytes(32)); 
 
         if ($tipoUsuario =="cliente"){
-            $categoria = "Inicial";
             $tipoUsuario = 2;
+            $categoria = 1;
         }else{
-            $categoria = "Dueño";
-            $tipoUsuario = 1;
+            $tipoUsuario = 3;
+
         }
-        $sql_insert = "INSERT INTO users (id_tipo, emailUser, pasUser, validado, fechaIngreso, categoriaUser, aprobado, tokenValidacionCorreo)
+        $sql_insert = "INSERT INTO users (id_tipo, emailUser, pasUser, validado, fechaIngreso, idCategoria, aprobado, tokenValidacionCorreo)
                VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
         $stmt->bind_param("sssisis", $tipoUsuario, $email, $password_hash,  $validado, $categoria, $aprobado, $tokenValidacionCorreo);
-
+        //
         if ($stmt->execute()) {
             try {
                 // Configuración del servidor
+                $mail->SMTPDebug = 2;
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'donatocataldicode@gmail.com'; // Tu Gmail
-                $mail->Password   = 'qqrd dkot mtzu gtio'; // Ver abajo
+                $mail->Password   = 'zdwi jcdm lyys coaf'; // Ver abajo
                 $mail->SMTPSecure = 'tls';
                 $mail->Port       = 587;
             
@@ -82,7 +83,7 @@ if (isset($_POST['submit'])) {
                 $mail->isHTML(true);
                 $mail->Subject = 'Valida tu cuenta';
                 $mail->Body    = "Hola,<br><br>Haz clic en el siguiente enlace para validar tu correo:<br><br>
-                                  <a href='http://tusitio.com/validar.php?email=$email&token=$tokenValidacionCorreo'>
+                                  <a href='http://localhost/web-eg/pages/validarEmail.php?email=$email&token=$tokenValidacionCorreo'>
                                   Validar cuenta</a>";
             
                 $mail->send();
@@ -114,7 +115,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../assets/css/style-register.css">
 </head>
 <body>
-    
+    <
     <div class="container">
         <div id="register-row" class="row justify-content-center align-items-center">
             <div id="register-column" class="col-md-6">

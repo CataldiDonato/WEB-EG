@@ -3,7 +3,10 @@ include '../include/db.php';
 require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
 
 use Firebase\JWT\JWT;
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 /*
 
@@ -45,9 +48,9 @@ if (isset($_POST['submit'])) {
             $usuario = $resultado->fetch_assoc();
 
             if (password_verify($password, $usuario['pasUser'])) {
-                $_SESSION['idUser'] = $usuario['idUser'];
+                $_SESSION['idUser'] = $usuario['id'];
                 $_SESSION['emailUser'] = $usuario['emailUser'];
-                $_SESSION['tipoUser'] = $usuario['tipoUser'];
+                $_SESSION['tipoUser'] = $usuario['id_tipo'];
                 //$data = $stmt->fetch(PDO::FETCH_ASSOC);
                 $keys = 'MESSI';
                 $token = JWT::encode(
@@ -56,9 +59,9 @@ if (isset($_POST['submit'])) {
                         'nbf' => time(),
                         'exp' => time() + 3600,
                         'data' => array(
-                            'idUser' => $usuario['idUser'],
+                            'idUser' => $usuario['id'],
                             'emailUser' => $usuario['emailUser'],
-                            'tipoUser' => $usuario['tipoUser'],
+                            'id_tipo' => $usuario['id_tipo'],
                         )
                     ),
                     $keys,
