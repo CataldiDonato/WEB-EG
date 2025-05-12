@@ -51,6 +51,39 @@ if (isset($_POST['submit'])) {
 <body>
     <div class="container mt-5">
         <button class="btn btn-primary" onclick="window.location.href='../perfil.php'">Volver</button>
+        <h1>Promociones activas</h1>
+        <?php
+        $sql = "SELECT * FROM locales WHERE codUsuario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $_SESSION['idUser']);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        if ($resultado->num_rows === 1) {
+            $local = $resultado->fetch_assoc();
+            $idlocal = $local['id'];
+
+            $sql = "SELECT * FROM promociones WHERE idcodLocal = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $idlocal);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            if ($resultado->num_rows > 0) {
+                while ($promocion = $resultado->fetch_assoc()) {
+                    echo '<div class="p-3 mb-3" style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px;">';
+                    echo '<div><strong>Promoción:</strong> ' . $promocion['textoPromo'] . '</div>';
+                    echo '<div><strong>Estado:</strong> ' . $promocion['estadoPromo'] . '</div>';
+                    echo '<div><strong>Fecha de inicio:</strong> ' . $promocion['fechaDesdePromo'] . '</div>';
+                    echo '<div><strong>Fecha de fin:</strong> ' . $promocion['fechaHastaPromo'] . '</div>';
+                    echo '<div><strong>Días de la semana:</strong> ' . $promocion['diasSemana'] . '</div>';
+                    echo '<div><strong>Categoría de cliente:</strong> ' . $promocion['idCategoriaCliente'] . '</div>';
+                    echo '<botton class="btn btn-danger" onclick="window.location.href=\'eliminarPromocion.php?id=' . $promocion['id'] . '\'">Eliminar</button>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<div class="alert alert-warning">No hay promociones activas.</div>';
+            }
+        }
+        ?>
         <h1>Cargar Promocion</h1>
         <form id="cargarPromocion-form" class="form" action="" method="post">
             <div class="mb-3">
