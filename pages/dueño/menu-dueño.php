@@ -23,13 +23,31 @@ if (isset($_POST['submit'])) {
     
     $codLocalDueño = $fila['id'];
 
+    $rutaCarpeta = '../../images/';
+    $rutaImagen = $rutaCarpeta . time() . '_' . $nombreArchivo; 
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $nombreArchivo = basename($_FILES['imagen']['name']);
+        $rutaCarpeta = '../../images/';
+        $rutaImagen = $rutaCarpeta . time() . '_' . $nombreArchivo;
+    
+    $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
+        if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
+            if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
+                echo '<div class="alert alert-danger">Error al subir la imagen.</div>';
+                $rutaImagen = '';
+            }
+        } else {
+            echo '<div class="alert alert-warning">Formato de imagen no permitido.</div>';
+            $rutaImagen = '';
+        }
+    }
 
     if (empty($textoPromo) || empty($fechaDesdePromo) || empty($fechaHastaPromo) || empty($categoriaCliente)) {
         echo '<div class="alert alert-danger">Por favor, complete todos los campos.</div>';
     } else {
-        $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssss", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño);
+        $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagen);
 
         if ($stmt->execute()) {
             echo '<div class="alert alert-success">Promoción cargada exitosamente.</div>';
@@ -136,6 +154,19 @@ if (isset($_POST['submit'])) {
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="domingo" name="diasSemana[]" value="d">
                     <label class="form-check-label" for="domingo">Domingo</label>
+                </div>
+                <div class="container mt-5">
+                    <h2 class="text-center">Subir Imagen</h2>
+                    <!-- Formulario de subida de imagen -->
+                    <form action="subir_imagen.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="imagen" class="form-label">Selecciona una imagen</label>
+                            <input type="file" name="imagen" id="imagen" class="form-control" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Subir Imagen</button>
+                        </div>
+                    </form>
                 </div>
                 </div>
             </div>

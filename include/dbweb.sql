@@ -1,155 +1,222 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
+-- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 17, 2025 at 12:58 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: 127.0.0.1    Database: dbweb
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.32-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Database: `dbweb`
+-- Table structure for table `categoria`
 --
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `categoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categoria` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categoria`
+--
+
+LOCK TABLES `categoria` WRITE;
+/*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
+INSERT INTO `categoria` VALUES (1,'Inicial'),(2,'Medium'),(3,'Premium');
+/*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `locales`
 --
 
+DROP TABLE IF EXISTS `locales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `locales` (
-  `codLocal` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `nombreLocal` varchar(100) NOT NULL,
   `ubicacionLocal` varchar(50) NOT NULL,
   `rubroLocal` varchar(20) NOT NULL,
-  `codUsuario` int(11) NOT NULL
+  `codUsuario` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `locales`
+--
+
+LOCK TABLES `locales` WRITE;
+/*!40000 ALTER TABLE `locales` DISABLE KEYS */;
+INSERT INTO `locales` VALUES (7,'pasta','funes','12',12),(8,'pasta','funes','perfumeria',12);
+/*!40000 ALTER TABLE `locales` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `novedades`
 --
 
+DROP TABLE IF EXISTS `novedades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `novedades` (
-  `codNovedad` int(11) NOT NULL,
-  `textoNovedad` text NOT NULL,
-  `fechaDesdeNovedad` date NOT NULL,
-  `fechaHastaNovedad` date NOT NULL,
-  `tipoUsuario` smallint(15) NOT NULL
+  `id` int(11) NOT NULL,
+  `textoNovedad` varchar(200) NOT NULL,
+  `fechaDesdeNovedad` datetime NOT NULL,
+  `fechaHastaNovedad` datetime NOT NULL,
+  `idTipoUsuario` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `novedades`
+--
+
+LOCK TABLES `novedades` WRITE;
+/*!40000 ALTER TABLE `novedades` DISABLE KEYS */;
+/*!40000 ALTER TABLE `novedades` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `promociones`
 --
 
+DROP TABLE IF EXISTS `promociones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `promociones` (
-  `codPromo` int(11) NOT NULL,
-  `textoPromo` text NOT NULL,
-  `fechaDesdePromo` date NOT NULL,
-  `fechaHastaPromo` date NOT NULL,
-  `categoriaCliente` varchar(10) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `textoPromo` varchar(200) NOT NULL,
+  `fechaDesdePromo` datetime NOT NULL,
+  `fechaHastaPromo` datetime NOT NULL,
+  `idCategoriaCliente` int(11) NOT NULL,
   `diasSemana` varchar(20) NOT NULL,
   `estadoPromo` varchar(10) NOT NULL,
-  `codLocal` int(11) NOT NULL
+  `idcodLocal` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_codigo_local` (`idcodLocal`),
+  KEY `fk_categoria_idx` (`idCategoriaCliente`),
+  CONSTRAINT `fk_categoria_promociones` FOREIGN KEY (`idCategoriaCliente`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_codigo_local` FOREIGN KEY (`idcodLocal`) REFERENCES `locales` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `promociones`
+--
+
+LOCK TABLES `promociones` WRITE;
+/*!40000 ALTER TABLE `promociones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promociones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tipo_usuario`
+--
+
+DROP TABLE IF EXISTS `tipo_usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipo_usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_usuario`
+--
+
+LOCK TABLES `tipo_usuario` WRITE;
+/*!40000 ALTER TABLE `tipo_usuario` DISABLE KEYS */;
+INSERT INTO `tipo_usuario` VALUES (1,'admin'),(2,'cliente'),(3,'local');
+/*!40000 ALTER TABLE `tipo_usuario` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `codUsuario` int(11) NOT NULL,
-  `nombreUsuario` varchar(100) NOT NULL,
-  `claveUsuario` varchar(8) NOT NULL,
-  `tipoUsuario` varchar(15) NOT NULL,
-  `categoriaCliente` varchar(10) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tipo` int(11) NOT NULL,
+  `emailUser` varchar(50) NOT NULL,
+  `pasUser` varchar(255) NOT NULL,
+  `validado` tinyint(1) DEFAULT 0,
+  `fechaIngreso` datetime NOT NULL,
+  `idCategoria` int(11) NOT NULL DEFAULT 1,
+  `aprobado` tinyint(1) DEFAULT 0,
+  `tokenValidacionCorreo` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_id_tipo` (`id_tipo`),
+  KEY `fk_categoria_idx` (`idCategoria`),
+  CONSTRAINT `fk_categoria` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tipo_usuario` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `usopromociones`
 --
 
+DROP TABLE IF EXISTS `usopromociones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usopromociones` (
-  `codCliente` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `codPromo` int(11) NOT NULL,
-  `fechaUso` date NOT NULL,
-  `estado` varchar(10) NOT NULL
+  `fechaUso` datetime NOT NULL,
+  `estado` varchar(10) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  KEY `fk_usuario_idx` (`idUsuario`),
+  CONSTRAINT `fk_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Indexes for dumped tables
+-- Dumping data for table `usopromociones`
 --
 
---
--- Indexes for table `locales`
---
-ALTER TABLE `locales`
-  ADD PRIMARY KEY (`codLocal`);
+LOCK TABLES `usopromociones` WRITE;
+/*!40000 ALTER TABLE `usopromociones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usopromociones` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indexes for table `novedades`
---
-ALTER TABLE `novedades`
-  ADD PRIMARY KEY (`codNovedad`);
-
---
--- Indexes for table `promociones`
---
-ALTER TABLE `promociones`
-  ADD PRIMARY KEY (`codPromo`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`codUsuario`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `locales`
---
-ALTER TABLE `locales`
-  MODIFY `codLocal` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `novedades`
---
-ALTER TABLE `novedades`
-  MODIFY `codNovedad` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `promociones`
---
-ALTER TABLE `promociones`
-  MODIFY `codPromo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `codUsuario` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-05-07 17:20:40
