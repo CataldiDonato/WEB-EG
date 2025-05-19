@@ -1,10 +1,10 @@
 <?php
 include '../include/db.php';
-
+include 'header.php';
 // Traer todas las promociones activas de todos los locales
 $sqlPromo = "SELECT promociones.*, locales.nombreLocal FROM promociones 
             INNER JOIN locales ON promociones.idcodLocal = locales.id 
-            WHERE estadoPromo = 'activa'";
+            WHERE estadoPromo = 'aprobada'";
 $stmtPromo = $conn->prepare($sqlPromo);
 $stmtPromo->execute();
 $promos = $stmtPromo->get_result();

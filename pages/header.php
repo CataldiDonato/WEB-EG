@@ -29,7 +29,7 @@ if(isset($_COOKIE['token'])){
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="index.php">Inicio</a>
+          <a class="nav-link" href="dashboard.php">Inicio</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="promociones.php">Promociones</a>
