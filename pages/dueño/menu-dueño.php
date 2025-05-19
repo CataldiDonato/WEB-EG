@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
     $codLocalDueño = $fila['id'];
 
     $rutaCarpeta = '../../images/';
-    $rutaImagen = $rutaCarpeta . time() . '_' . $nombreArchivo; 
+    $rutaImagen = ''; 
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombreArchivo = basename($_FILES['imagen']['name']);
         $rutaCarpeta = '../../images/';
@@ -103,21 +103,21 @@ if (isset($_POST['submit'])) {
         }
         ?>
         <h1>Cargar Promocion</h1>
-        <form id="cargarPromocion-form" class="form" action="" method="post">
+        <form id="cargarPromocion-form" class="form" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="descripcionPromocion" class="form-label"> descripcion Promocion</label>
-                <input type="text" class="form-control" id="descripcionPromocion" name="descripcionPromocion" required></input>
+                <label for="descripcionPromocion" class="form-label">Descripción Promoción</label>
+                <input type="text" class="form-control" id="descripcionPromocion" name="descripcionPromocion" required>
             </div>
             <div class="mb-3">
-                <label for="diaComienzaPromocion" class="form-label"> Día Comienza Promocion</label>
-                <input type="date" class="form-control" id="diaComienzaPromocion" name="diaComienzaPromocion" required></input>
+                <label for="diaComienzaPromocion" class="form-label">Día Comienza Promoción</label>
+                <input type="date" class="form-control" id="diaComienzaPromocion" name="diaComienzaPromocion" required>
             </div>
             <div class="mb-3">
-                <label for="diaTerminaPromocion" class="form-label"> Día Termina Promocion</label>
-                <input type="date" class="form-control" id="diaTerminaPromocion" name="diaTerminaPromocion" required></input>
+                <label for="diaTerminaPromocion" class="form-label">Día Termina Promoción</label>
+                <input type="date" class="form-control" id="diaTerminaPromocion" name="diaTerminaPromocion" required>
             </div>
             <div class="mb-3">
-                <label for="categoriaCliente" class="form-label">Categoria Cliente</label>
+                <label for="categoriaCliente" class="form-label">Categoría Cliente</label>
                 <select class="form-control" id="categoriaCliente" name="categoriaCliente" required>
                     <option value="1">Inicial</option>
                     <option value="2">Medium</option>
@@ -125,8 +125,7 @@ if (isset($_POST['submit'])) {
                 </select>
             </div>
             <div class="mb-3">
-                <label for="diasSemana" class="form-label"> Días de la semana que está vigente</label>
-                <div id="diasSemana">
+                <label for="diasSemana" class="form-label">Días de la semana que está vigente</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="lunes" name="diasSemana[]" value="l">
                     <label class="form-check-label" for="lunes">Lunes</label>
@@ -155,18 +154,15 @@ if (isset($_POST['submit'])) {
                     <input class="form-check-input" type="checkbox" id="domingo" name="diasSemana[]" value="d">
                     <label class="form-check-label" for="domingo">Domingo</label>
                 </div>
-                <div class="container mt-5">
-                    <h2 class="text-center">Subir Imagen</h2>
-                    <!-- Formulario de subida de imagen -->
-                    <form action="subir_imagen.php" method="POST" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="imagen" class="form-label">Selecciona una imagen</label>
-                            <input type="file" name="imagen" id="imagen" class="form-control" required>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Subir Imagen</button>
-                        </div>
-                    </form>
+            </div>
+            <div class="mb-3">
+                <label for="imagen" class="form-label">Selecciona una imagen</label>
+                <input type="file" name="imagen" id="imagen" class="form-control" required>
+            </div>
+            <div class="text-center">
+                <input type="submit" name="submit" class="btn btn-primary" value="Cargar Promoción">
+            </div>
+        </form>
                 </div>
                 </div>
             </div>
