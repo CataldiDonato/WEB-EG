@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
 
         }
         $sql_insert = "INSERT INTO users (id_tipo, emailUser, pasUser, validado, fechaIngreso, idCategoria, aprobado, tokenValidacionCorreo)
-               VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
+                VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
         $stmt->bind_param("sssisis", $tipoUsuario, $email, $password_hash,  $validado, $categoria, $aprobado, $tokenValidacionCorreo);
         //

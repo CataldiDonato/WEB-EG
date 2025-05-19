@@ -11,9 +11,11 @@
         <button>Gestión de locales 🏬</button>
     </a>
     <button>Validacion de dueños de locales 👤</button>
-    <button>Gestionar Ofertas 🎁</button>
-    <button>Gestionar novedades 📰</button>
-    <button>cerrar sesion 🚪</button>
+    <a href="./activar-promociones/lista-promociones.php">
+        <button>Activar Promociones 🎁</button>
+    </a>
+    <button>Gestionar Novedades 📰</button>
+    <button>Cerrar Sesion 🚪</button>
     
 </body>
 </html>
