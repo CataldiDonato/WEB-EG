@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
     $rutaImagen = ''; 
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombreArchivo = basename($_FILES['imagen']['name']);
-        $rutaCarpeta = '../../images/';
+        $rutaCarpeta = 'assets/img/';
         $rutaImagen = $rutaCarpeta . time() . '_' . $nombreArchivo;
     
     $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
@@ -94,7 +94,9 @@ if (isset($_POST['submit'])) {
                     echo '<div><strong>Fecha de fin:</strong> ' . $promocion['fechaHastaPromo'] . '</div>';
                     echo '<div><strong>Días de la semana:</strong> ' . $promocion['diasSemana'] . '</div>';
                     echo '<div><strong>Categoría de cliente:</strong> ' . $promocion['idCategoriaCliente'] . '</div>';
-                    echo '<botton class="btn btn-danger" onclick="window.location.href=\'eliminarPromocion.php?id=' . $promocion['id'] . '\'">Eliminar</button>';
+                    echo '<div><strong>Imagen:</strong> <img src="' . $promocion['rutaImagen'] . '" alt="Imagen de la promoción" style="max-width: 200px; max-height: 200px;"></div>';
+                    echo '<br>';  
+                    echo '<button class="btn btn-danger" onclick="window.location.href=\'eliminarPromocion.php?id=' . $promocion['id'] . '\'">Eliminar</button>';
                     echo '</div>';
                 }
             } else {

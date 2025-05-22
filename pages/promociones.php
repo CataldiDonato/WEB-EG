@@ -24,20 +24,22 @@ $promos = $stmtPromo->get_result();
         <?php if ($promos->num_rows > 0): ?>
             <?php while ($promo = $promos->fetch_assoc()): ?>
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <?php
-                        $rutaImagen = !empty($promo['rutaImagen']) ? str_replace('../../', '', $promo['rutaImagen']) : 'img/default.jpg';
-                        ?>
-                        <img src="<?= htmlspecialchars($rutaImagen) ?>" class="card-img-top" alt="Imagen promoción">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($promo['textoPromo']) ?></h5>
-                            <p class="card-text">
-                                <strong>Local:</strong> <?= htmlspecialchars($promo['nombreLocal']) ?><br>
-                                <strong>Desde:</strong> <?= htmlspecialchars($promo['fechaDesdePromo']) ?><br>
-                                <strong>Hasta:</strong> <?= htmlspecialchars($promo['fechaHastaPromo']) ?><br>
-                                <strong>Días:</strong> <?= htmlspecialchars($promo['diasSemana']) ?>
-                            </p>
-                            <span class="badge bg-info text-dark">Categoría: <?= htmlspecialchars($promo['idCategoriaCliente']) ?></span>
+                    <div class="d-flex align-items-center h-100">
+                        <div class="card w-100">
+                            <?php
+                            $rutaImagen = !empty($promo['rutaImagen']) ? '../'. $promo['rutaImagen'] : '../assets/img/default.jpg';
+                            ?>
+                            <img src="<?= htmlspecialchars($rutaImagen) ?>" class="card-img-top" alt="Imagen promoción">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($promo['textoPromo']) ?></h5>
+                                <p class="card-text">
+                                    <strong>Local:</strong> <?= htmlspecialchars($promo['nombreLocal']) ?><br>
+                                    <strong>Desde:</strong> <?= htmlspecialchars($promo['fechaDesdePromo']) ?><br>
+                                    <strong>Hasta:</strong> <?= htmlspecialchars($promo['fechaHastaPromo']) ?><br>
+                                    <strong>Días:</strong> <?= htmlspecialchars($promo['diasSemana']) ?>
+                                </p>
+                                <span class="badge bg-info text-dark">Categoría: <?= htmlspecialchars($promo['idCategoriaCliente']) ?></span>
+                            </div>
                         </div>
                     </div>
                 </div>
