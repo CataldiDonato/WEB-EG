@@ -1,0 +1,28 @@
+.body-gestion-locales {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title-gestion-locales{
+    color: #343a40;
+}
+
+table th, table td {
+    vertical-align: middle;
+}
+
+.btn {
+    min-width: 100px;
+}
+
+table {
+    font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+    .btn {
+        min-width: auto;
+        font-size: 0.9rem;
+        padding: 0.375rem 0.5rem;
+    }
+}

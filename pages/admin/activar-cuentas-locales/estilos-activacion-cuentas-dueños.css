@@ -1,0 +1,21 @@
+.body-activacion-cuentas-dueños {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.title-dueños-locales-admin{
+    text-align: center;
+    color: #343a40;
+    margin-top: 20px;
+
+}

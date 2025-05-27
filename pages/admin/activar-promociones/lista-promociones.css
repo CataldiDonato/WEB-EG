@@ -1,0 +1,14 @@
+.body-lista-promociones {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title-lista-promociones{
+    text-align: center;
+    color: #343a40;
+    margin-top: 30px;
+}

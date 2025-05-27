@@ -1,7 +1,7 @@
 <?php
 include("../../../include/db.php");
 
-// Configuración de paginacion 
+// Configuración de paginación 
 $porPagina = 5;
 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina - 1) * $porPagina;
@@ -18,62 +18,110 @@ $resultado = $conn->query($sql);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Gestión de Locales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="gestion-locales.css" />
 </head>
-<body>
-    <h1>Gestión de Locales</h1>
-    <h2>Agregar nuevo local</h2>
-    <form action="agregar-local.php" method="POST">
-        <input type="text" name="nombreLocal" placeholder="Nombre del local" required>
-        <input type="text" name="ubicacionLocal" placeholder="Ubicacion del local" required>
-        <input type="text" name="rubroLocal" placeholder="Rubro del local" required>
-        <input type="number" name="codUsuario" placeholder="Codigo de usuario" required>
-        <button type="submit">Agregar</button>
-    </form>
-    <h2>Lista de Locales</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Ubicacion del local</th>
-                <th>Rubro del local</th>
-                <th>Codigo de usuario</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($local = $resultado->fetch_assoc()) { ?>
-                <tr>
-                    <td><?= $local['id'] ?></td>
-                    <td><?= $local['nombreLocal'] ?></td>
-                    <td><?= $local['ubicacionLocal'] ?></td>
-                    <td><?= $local['rubroLocal'] ?></td>
-                    <td><?= $local['codUsuario'] ?></td>
-                    <td>
-                        <form action="eliminar-local.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="id" value="<?= $local['id'] ?>">
-                            <button type="submit">Eliminar</button>
-                        </form>
-                        <form action="actualizar-local.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="id" value="<?= $local['id'] ?>">
-                            <button type="submit">Actualizar</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php } ?>
-        </tbody>
-    </table>
-    <div">
-        <?php if ($pagina > 1): ?>
-            <a href="?pagina=<?= $pagina - 1 ?>">Anterior</a>
-        <?php endif; ?>
-        Página <?= $pagina ?>
-        <?php if ($pagina * $porPagina < $totalLocales): ?>
-            <a href="?pagina=<?= $pagina + 1 ?>">Siguiente</a>
-        <?php endif; ?>
+<body class="body-gestion-locales">
+
+<div class="container my-5">
+    <h1 class="mb-4 text-center title-gestion-locales">Gestión de Locales</h1>
+
+    <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0 ">Agregar nuevo local</h2>
+        </div>
+        <div class="card-body">
+            <form action="agregar-local.php" method="POST" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="nombreLocal" class="form-control" placeholder="Nombre del local" required />
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="ubicacionLocal" class="form-control" placeholder="Ubicación del local" required />
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="rubroLocal" class="form-control" placeholder="Rubro del local" required />
+                </div>
+                <div class="col-md-6">
+                    <input type="number" name="codUsuario" class="form-control" placeholder="Código de usuario" required />
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <a href="../menu-admin.php">Volver</a>
+
+    <h2 class="mb-3 title-gestion-locales">Lista de Locales</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Ubicación</th>
+                    <th>Rubro</th>
+                    <th>Código Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($local = $resultado->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?= htmlspecialchars($local['id']) ?></td>
+                        <td><?= htmlspecialchars($local['nombreLocal']) ?></td>
+                        <td><?= htmlspecialchars($local['ubicacionLocal']) ?></td>
+                        <td><?= htmlspecialchars($local['rubroLocal']) ?></td>
+                        <td><?= htmlspecialchars($local['codUsuario']) ?></td>
+                        <td>
+                            <form action="eliminar-local.php" method="POST" class="d-inline">
+                                <input type="hidden" name="id" value="<?= $local['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este local?');">Eliminar</button>
+                            </form>
+                            <form action="actualizar-local.php" method="POST" class="d-inline ms-2">
+                                <input type="hidden" name="id" value="<?= $local['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-warning">Actualizar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php } ?>
+                <?php if ($resultado->num_rows === 0): ?>
+                    <tr><td colspan="6" class="text-center">No hay locales para mostrar.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="Paginación de locales" class="d-flex justify-content-center my-4">
+        <ul class="pagination">
+            <?php if ($pagina > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>">Anterior</a>
+                </li>
+            <?php else: ?>
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            <?php endif; ?>
+
+            <li class="page-item active"><span class="page-link"><?= $pagina ?></span></li>
+
+            <?php if ($pagina * $porPagina < $totalLocales): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=<?= $pagina + 1 ?>">Siguiente</a>
+                </li>
+            <?php else: ?>
+                <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+
+    <div class="text-center mt-3">
+        <a href="../menu-admin.php" class="btn btn-secondary">Volver al menú</a>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
