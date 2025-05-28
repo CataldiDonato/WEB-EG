@@ -1,7 +1,6 @@
 <?php
 include '../include/db.php';
-require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
-
+require_once __DIR__ . '/../vendor/autoload.php';
 use Firebase\JWT\JWT;
 if (session_status() == PHP_SESSION_NONE) {
     session_start();

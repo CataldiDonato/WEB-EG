@@ -1,11 +1,22 @@
 <?php
 include '../include/db.php';
 include 'header.php';
-// Traer todas las promociones activas de todos los locales
+$idUsuario = $_SESSION['idUser'] ?? 0;
+$categoriaCliente = null;
+if ($idUsuario) {
+    $sqlCategoria = "SELECT idCategoria FROM users WHERE id = ?";
+    $stmtCategoria = $conn->prepare($sqlCategoria);
+    $stmtCategoria->bind_param("i", $idUsuario);
+    $stmtCategoria->execute();
+    $stmtCategoria->bind_result($categoriaCliente);
+    $stmtCategoria->fetch();
+    $stmtCategoria->close();
+}
 $sqlPromo = "SELECT promociones.*, locales.nombreLocal FROM promociones 
             INNER JOIN locales ON promociones.idcodLocal = locales.id 
-            WHERE estadoPromo = 'aprobada'";
+            WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?";
 $stmtPromo = $conn->prepare($sqlPromo);
+$stmtPromo->bind_param("i", $categoriaCliente);
 $stmtPromo->execute();
 $promos = $stmtPromo->get_result();
 ?>
@@ -28,6 +39,16 @@ $promos = $stmtPromo->get_result();
                         <div class="card w-100">
                             <?php
                             $rutaImagen = !empty($promo['rutaImagen']) ? '../'. $promo['rutaImagen'] : '../assets/img/default.jpg';
+                            $yaComprada = false;
+                            if ($idUsuario) {
+                                $sqlCheck = "SELECT id FROM usopromociones WHERE codPromo = ? AND idUsuario = ?";
+                                $stmtCheck = $conn->prepare($sqlCheck);
+                                $stmtCheck->bind_param("ii", $promo['id'], $idUsuario);
+                                $stmtCheck->execute();
+                                $stmtCheck->store_result();
+                                $yaComprada = $stmtCheck->num_rows > 0;
+                                $stmtCheck->close();
+                            }
                             ?>
                             <img src="<?= htmlspecialchars($rutaImagen) ?>" class="card-img-top" alt="Imagen promoción">
                             <div class="card-body">
@@ -38,7 +59,16 @@ $promos = $stmtPromo->get_result();
                                     <strong>Hasta:</strong> <?= htmlspecialchars($promo['fechaHastaPromo']) ?><br>
                                     <strong>Días:</strong> <?= htmlspecialchars($promo['diasSemana']) ?>
                                 </p>
-                                <span class="badge bg-info text-dark">Categoría: <?= htmlspecialchars($promo['idCategoriaCliente']) ?></span>
+                                <?php if ($idUsuario && !$yaComprada): ?>
+                                    <form action="comprar_promo.php" method="post" class="mt-3">
+                                        <input type="hidden" name="codPromo" value="<?= $promo['id'] ?>">
+                                        <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
+                                        <input type="hidden" name="estado" value="pendiente">
+                                        <button type="submit" class="btn btn-success w-100">Comprar</button>
+                                    </form>
+                                <?php elseif ($yaComprada): ?>
+                                    <div class="alert alert-secondary mt-3 text-center">Ya compraste esta promoción</div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

@@ -10,9 +10,9 @@ if (isset($_POST['submit'])) {
     $fechaHastaPromo = $_POST['diaTerminaPromocion'] ?? '';
     $categoriaCliente = $_POST['categoriaCliente'] ?? '';
     $diasSemana = $_POST['diasSemana'] ?? [];
-    $diasSemanaString = implode(',', $diasSemana); // Convertir el array a una cadena separada por comas
-    $estPromo ="pendiente";
-    
+    $diasSemanaString = implode(',', $diasSemana);
+    $estPromo = "pendiente";
+
     $sql_check = "SELECT * FROM locales WHERE codUsuario = ?";
     $stmt = $conn->prepare($sql_check);
     $stmt->bind_param("i", $_SESSION['idUser']);
@@ -20,34 +20,57 @@ if (isset($_POST['submit'])) {
     $resultado = $stmt->get_result();
 
     $fila = $resultado->fetch_assoc();
-    
+
+    if (!$fila) {
+        echo '
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                                <use xlink:href="#exclamation-triangle-fill"/>
+                            </svg>
+                            <div>
+                                <h4 class="alert-heading">¡Atención!</h4>
+                                <p>No se encontró un local asociado a este usuario.</p>
+                                <hr>
+                                <a href="javascript:history.back()" class="btn btn-outline-danger mt-2">Volver atrás</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ';
+        exit;
+    }
+
     $codLocalDueño = $fila['id'];
 
-    $rutaCarpeta = '../../images/';
-    $rutaImagen = ''; 
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-        $nombreArchivo = basename($_FILES['imagen']['name']);
-        $rutaCarpeta = 'assets/img/';
-        $rutaImagen = $rutaCarpeta . time() . '_' . $nombreArchivo;
-    
+    $rutaCarpeta = __DIR__ . '/../../assets/img/';
+    if (!is_dir($rutaCarpeta)) {
+        mkdir($rutaCarpeta, 0777, true);
+    }
+    $nombreArchivo = time() . '_' . basename($_FILES['imagen']['name']);
+    $rutaImagenAbsoluta = $rutaCarpeta . $nombreArchivo;
+    $rutaImagenWeb = 'assets/img/' . $nombreArchivo;
+
     $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
-        if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
-            if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
-                echo '<div class="alert alert-danger">Error al subir la imagen.</div>';
-                $rutaImagen = '';
-            }
-        } else {
-            echo '<div class="alert alert-warning">Formato de imagen no permitido.</div>';
-            $rutaImagen = '';
+    if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
+        if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagenAbsoluta)) {
+            echo '<div class="alert alert-danger">Error al subir la imagen.</div>';
+            $rutaImagenWeb = '';
         }
+    } else {
+        echo '<div class="alert alert-warning">Formato de imagen no permitido.</div>';
+        $rutaImagenWeb = '';
     }
 
     if (empty($textoPromo) || empty($fechaDesdePromo) || empty($fechaHastaPromo) || empty($categoriaCliente)) {
         echo '<div class="alert alert-danger">Por favor, complete todos los campos.</div>';
     } else {
-        $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+        $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagen);
+        $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagenWeb);
 
         if ($stmt->execute()) {
             echo '<div class="alert alert-success">Promoción cargada exitosamente.</div>';
@@ -94,7 +117,7 @@ if (isset($_POST['submit'])) {
                     echo '<div><strong>Fecha de fin:</strong> ' . $promocion['fechaHastaPromo'] . '</div>';
                     echo '<div><strong>Días de la semana:</strong> ' . $promocion['diasSemana'] . '</div>';
                     echo '<div><strong>Categoría de cliente:</strong> ' . $promocion['idCategoriaCliente'] . '</div>';
-                    echo '<div><strong>Imagen:</strong> <img src="' . $promocion['rutaImagen'] . '" alt="Imagen de la promoción" style="max-width: 200px; max-height: 200px;"></div>';
+                    echo '<div><strong>Imagen:</strong> <img src="../../' . $promocion['rutaImagen'] . '" alt="Imagen de la promoción" style="max-width: 200px; max-height: 200px;"></div>';
                     echo '<br>';  
                     echo '<button class="btn btn-danger" onclick="window.location.href=\'eliminarPromocion.php?id=' . $promocion['id'] . '\'">Eliminar</button>';
                     echo '</div>';

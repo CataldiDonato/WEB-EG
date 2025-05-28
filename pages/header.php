@@ -2,8 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
-
-require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
+require '../vendor/autoload.php'; 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 $key ='MESSI';

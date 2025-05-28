@@ -1,10 +1,11 @@
 <?php
 
 include '../include/db.php';
-require '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 $mail = new PHPMailer(true);
 
 if (isset($_POST['submit'])) {
@@ -56,6 +57,7 @@ if (isset($_POST['submit'])) {
             $categoria = 1;
         }else{
             $tipoUsuario = 3;
+            $categoria = 3;
 
         }
         $sql_insert = "INSERT INTO users (id_tipo, emailUser, pasUser, validado, fechaIngreso, idCategoria, aprobado, tokenValidacionCorreo)
