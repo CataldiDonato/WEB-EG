@@ -12,7 +12,7 @@ if(isset($_COOKIE['token'])){
     $usuario_autenticado = true;
 }else{
     $usuario_autenticado = false;
-}
+} 
 
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
