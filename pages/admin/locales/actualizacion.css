@@ -1,0 +1,13 @@
+.fondo-claro {
+    background-color: #f8f9fa;
+}
+
+.sombra {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.encabezado {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
