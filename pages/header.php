@@ -33,6 +33,9 @@ if(isset($_COOKIE['token'])){
         <li class="nav-item">
           <a class="nav-link" href="promociones.php">Promociones</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contacto.php">Contactanos</a>
+        </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="novedades.php">Novedades</a>
         </li>
