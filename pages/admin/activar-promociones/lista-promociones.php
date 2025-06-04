@@ -61,15 +61,15 @@ if ($resultado && $resultado->num_rows > 0) {
                         <td><?= $promo['idcodLocal'] ?></td>
                         <td>
                             <?php if ($promo['estadoPromo'] == 'pendiente'): ?>
-                                <form method="post" action="actualizar-estado-promociones.php" class="d-inline">
+                                <form method="post" action="actualizar-estado-promociones.php" class="d-inline form-aprobar">
                                     <input type="hidden" name="id" value="<?= $promo['id'] ?>">
                                     <input type="hidden" name="accion" value="aprobar">
-                                    <button type="submit" class="btn btn-sm btn-success">Aprobar</button>
+                                    <button type="button" class="btn btn-sm btn-success btn-aprobar">Aprobar</button>
                                 </form>
-                                <form method="post" action="actualizar-estado-promociones.php" class="d-inline ms-1">
+                                <form method="post" action="actualizar-estado-promociones.php" class="d-inline form-denegar ms-1">
                                     <input type="hidden" name="id" value="<?= $promo['id'] ?>">
                                     <input type="hidden" name="accion" value="denegar">
-                                    <button type="submit" class="btn btn-sm btn-danger">Denegar</button>
+                                    <button type="button" class="btn btn-sm btn-danger btn-denegar">Denegar</button>
                                 </form>
                             <?php else: ?>
                                 <span class="text-muted">Sin acciones</span>
@@ -105,5 +105,64 @@ if ($resultado && $resultado->num_rows > 0) {
         <a href="../menu-admin.php" class="btn btn-secondary">Volver al menú</a>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.querySelectorAll('.btn-aprobar').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "¿Aprobar promoción?",
+            text: "¿Estás seguro de aprobar esta promoción?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, aprobar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "¡Aprobado!",
+                    text: "Su promoción fue aprobada con éxito.",
+                    icon: "success",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didClose: () => {
+                        btn.closest('form').submit();
+                    }
+                });
+            }
+        });
+    });
+});
+document.querySelectorAll('.btn-denegar').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "¿Denegar promoción?",
+            text: "¿Estás seguro de denegar esta promoción?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, denegar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "Su promocion fue denegada con exito.",
+                    icon: "success",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didClose: () => {
+                        btn.closest('form').submit();
+                    }
+            });
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

@@ -19,6 +19,16 @@ table {
     font-size: 0.95rem;
 }
 
+.td-acciones {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.td-acciones form {
+    display: inline-block;
+    margin: 0 5px;
+}
+
 @media (max-width: 576px) {
     .btn {
         min-width: auto;

@@ -11,5 +11,5 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssss", $nombreLocal, $ubicacionLocal , $rubroLocal, $codUsuario);
 $stmt->execute();
 
-header("Location: gestion-locales.php");
+header("Location: gestion-locales.php?agregado=ok");
 exit();

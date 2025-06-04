@@ -23,6 +23,7 @@ $resultado = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="gestion-locales.css" />
+
 </head>
 <body class="body-gestion-locales">
 
@@ -70,18 +71,18 @@ $resultado = $conn->query($sql);
             <tbody>
                 <?php while ($local = $resultado->fetch_assoc()) { ?>
                     <tr>
-                        <td><?= htmlspecialchars($local['id']) ?></td>
-                        <td><?= htmlspecialchars($local['nombreLocal']) ?></td>
-                        <td><?= htmlspecialchars($local['ubicacionLocal']) ?></td>
-                        <td><?= htmlspecialchars($local['rubroLocal']) ?></td>
-                        <td><?= htmlspecialchars($local['codUsuario']) ?></td>
-                        <td>
+                        <td class="td-acciones"><?= htmlspecialchars($local['id']) ?></td>
+                        <td class="td-acciones"><?= htmlspecialchars($local['nombreLocal']) ?></td>
+                        <td class="td-acciones"><?= htmlspecialchars($local['ubicacionLocal']) ?></td>
+                        <td class="td-acciones"><?= htmlspecialchars($local['rubroLocal']) ?></td>
+                        <td class="td-acciones"><?= htmlspecialchars($local['codUsuario']) ?></td>
+                        <td class="td-acciones">
                             <form action="eliminar-local.php" method="POST" class="d-inline">
-                                <input type="hidden" name="id" value="<?= $local['id'] ?>">
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que quieres eliminar este local?');">Eliminar</button>
+                                <input type="hidden" name="id" value="<?= htmlspecialchars($local['id']) ?>">
+                                <button type="button" class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
                             </form>
-                            <form action="actualizar-local.php" method="POST" class="d-inline ms-2">
-                                <input type="hidden" name="id" value="<?= $local['id'] ?>">
+                            <form action="actualizar-local.php" method="POST" class="d-inline">
+                                <input type="hidden" name="id" value="<?= htmlspecialchars($local['id']) ?>">
                                 <button type="submit" class="btn btn-sm btn-warning">Actualizar</button>
                             </form>
                         </td>
@@ -121,7 +122,42 @@ $resultado = $conn->query($sql);
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<?php if (isset($_GET['agregado']) && $_GET['agregado'] === 'ok') : ?>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: '¡Local agregado!',
+        text: 'El local se ha agregado exitosamente.',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Aceptar'
+    });
+</script>
+<?php endif; ?>
+<script>
+document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminarlo"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "Su local se ha elimino con exito.",
+                    icon: "success"
+            });
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
