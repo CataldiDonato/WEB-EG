@@ -72,14 +72,14 @@ if (isset($_POST['submit'])) {
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
-                $mail->Username   = 'donatocataldicode@gmail.com'; // Tu Gmail
-                $mail->Password   = 'zdwi jcdm lyys coaf'; // Ver abajo
+                $mail->Username   = 'donatocataldicode@gmail.com'; 
+                $mail->Password   = 'zdwi jcdm lyys coaf'; 
                 $mail->SMTPSecure = 'tls';
                 $mail->Port       = 587;
             
                 // Remitente y destinatario
                 $mail->setFrom('donatocataldicode@gmail.com', 'Nombre del Sitio');
-                $mail->addAddress($email); // Por ejemplo, el email del usuario registrado
+                $mail->addAddress($email); 
             
                 // Contenido
                 $mail->isHTML(true);

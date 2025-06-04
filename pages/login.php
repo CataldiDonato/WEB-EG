@@ -1,8 +1,15 @@
 <?php
 include '../include/db.php';
-require '../vendor/autoload.php'; 
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+if (class_exists(JWT::class)) {
+    echo "JWT cargado correctamente.";
+} else {
+    echo "JWT NO cargado.";
+}
 
 use Firebase\JWT\JWT;
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
