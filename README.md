@@ -3,10 +3,13 @@
 [**FACULTAD ](https://www.iua.edu.ar/)**REGIONAL ROSARIO ![](Aspose.Words.da2fbb18-004a-4a09-8a66-40d876837536.002.png)**
 
 Cátedra de: ENTORNOS GRÁFICOS 
+para poder correr el programa necesitamos installar composer, su comando es:
+composer install.
 
 **Trabajo Práctico Año 2025** 
 
 **Introducción** 
+
 
 Dado que la carrera Ingeniería en Sistemas de Información, tiende a la definición de un espacio interdisciplinario e integrador de aprendizajes, y está constituida por un conjunto de materias cuya finalidad es la de crear a lo largo de la carrera un espacio de estudio interdisciplinario y fortalecer los conceptos fundamentales de la profesión, que permitan a los estudiantes conocer las características del trabajo ingenieril, partiendo desde los problemas básicos de los Sistemas de Información;  se pretende a través de este desarrollo web, lograr un espacio de articulación vertical dentro del área de Desarrollo de Software, en la cual está enmarcada la asignatura. Luego, el trabajo práctico a desarrollar se basa en el realizado en el ciclo lectivo 2023 por los alumnos de la cátedra de Algoritmos y Estructura de Datos. 
 
