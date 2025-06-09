@@ -149,11 +149,7 @@ document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
             confirmButtonText: "Sí, eliminarlo"
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Eliminado!",
-                    text: "Su local se ha elimino con exito.",
-                    icon: "success"
-            });
+                btn.closest('form').submit();
             }
         });
     });

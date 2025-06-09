@@ -20,7 +20,7 @@
         <a href="./activar-cuentas-locales/lista-dueños-locales.php" class="btn btn-warning">
             👤 Activar Cuenta de Dueños
         </a>
-        <a href="#" class="btn btn-info">
+        <a href="./crear-novedades/novedades.php" class="btn btn-info">
             📰 Gestionar Novedades
         </a>
         <a href="#" class="btn btn-danger">
