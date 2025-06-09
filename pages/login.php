@@ -2,11 +2,11 @@
 include '../include/db.php';
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-if (class_exists(JWT::class)) {
-    echo "JWT cargado correctamente.";
-} else {
-    echo "JWT NO cargado.";
-}
+// if (class_exists(JWT::class)) {
+//     echo "JWT cargado correctamente.";
+// } else {
+//     echo "JWT NO cargado.";
+// }
 
 use Firebase\JWT\JWT;
 

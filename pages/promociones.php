@@ -36,7 +36,7 @@ $promos = $stmtPromo->get_result();
             <?php while ($promo = $promos->fetch_assoc()): ?>
                 <div class="col-md-4 mb-4">
                     <div class="d-flex align-items-center h-100">
-                        <div class="card w-100">
+                        <div class="card w-80">
                             <?php
                             $rutaImagen = !empty($promo['rutaImagen']) ? '../'. $promo['rutaImagen'] : '../assets/img/default.jpg';
                             $yaComprada = false;

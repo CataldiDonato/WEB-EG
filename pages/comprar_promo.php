@@ -13,6 +13,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("issi", $codPromo, $fechaUso, $estado, $idUsuario);
         if ($stmt->execute()) {
+            $sql = "SELECT * FROM users WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $idUsuario);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 1) {
+                $usuario = $result->fetch_assoc();
+                $usuario['usosPromociones'] += 1; 
+                if ($usuario['usosPromociones'] > 5 and $usuario['idCategoria'] == 1) {
+                    $usuario['idCategoria'] = 2; 
+                }
+                if ($usuario['usosPromociones'] > 10 and $usuario['idCategoria'] == 2) {
+                    $usuario['idCategoria'] = 3; 
+                }
+                $updateSql = "UPDATE users SET usosPromociones = ?, idCategoria = ? WHERE id = ?";
+                $updateStmt = $conn->prepare($updateSql);
+                $updateStmt->bind_param("iii", $usuario['usosPromociones'], $usuario['idCategoria'], $idUsuario);
+                $updateStmt->execute();
+            }
+
             header("Location: promociones.php?compra=ok");
             exit;
         } else {
@@ -21,5 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo '<div class="alert alert-danger">Datos incompletos.</div>';
     }
+
 }
 ?>
