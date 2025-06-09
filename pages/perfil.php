@@ -79,12 +79,15 @@ if ($resultado->num_rows === 1) {
                 </p>
             </div>
         </div>
-        <!-- el id 3 era admin -->
         <?php if ($_SESSION["tipoUser"] == 3): ?>
             <div class="d-flex gap-3 mb-4">
-                <!-- cambiar ruta a admin/menu-admin.php -->
                 <a href="dueño/menu-dueño.php" class="btn btn-primary">Ir a Panel del Dueño</a>
                 <a href="dueño/mostrarusopromociones.php" class="btn btn-secondary">Ver uso de promociones</a>
+            </div>
+        <?php endif; ?>
+        <?php if ($_SESSION["tipoUser"] == 1): ?>
+            <div class="d-flex gap-3 mb-4">
+                <a href="admin/menu-admin.php" class="btn btn-primary">Ir a Panel del Admin</a>
             </div>
         <?php endif; ?>
 
