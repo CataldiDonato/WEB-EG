@@ -1,0 +1,24 @@
+.promo-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    transition: box-shadow 0.2s;
+    height: 100%;
+}
+.promo-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.promo-checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 1rem;
+}
+.promo-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: #f8f9fa;
+}

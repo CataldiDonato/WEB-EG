@@ -1,18 +1,11 @@
 <?php
-// session_start();
-// require_once __DIR__ . '/../vendor/autoload.php';
-// use Firebase\JWT\JWT;
-// use Firebase\JWT\Key;
-// $key ='MESSI';
-// if(isset($_COOKIE['token'])){
-//     $token = $_COOKIE['token'];
-//     $decoded = JWT::decode($token, new Key($key, 'HS256'));
-// }else{
-//     header('Location: login.php');
-//     exit();
-// }
+include '../include/db.php';
 
+// Obtener las 3 promociones destacadas
+$destacadas = $conn->query("SELECT textoPromo, fechaDesdePromo, fechaHastaPromo, rutaImagen FROM promociones WHERE destacada = 1 AND estadoPromo = 'aprobada' LIMIT 3");
 
+// Obtener novedades activas (puedes ajustar la lógica de fechas si lo deseas)
+$novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNovedad FROM novedades ORDER BY fechaDesdeNovedad DESC");
 ?>
 
 <!DOCTYPE html>
@@ -22,27 +15,70 @@
     <title>Shopping Promos - Inicio</title>
     <link rel="stylesheet" href="../assets/css/bootstrap-css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style-header.css">
+    <link rel="stylesheet" href="../assets/css/style-dashboard.css">
 </head>
 <body>
-    <?php include'header.php'; ?>
+    <?php include 'header.php'; ?>
     <main>
-        <section>
-            <h2>Promociones Destacadas</h2>
-            <article>
-                <h3>Descuento en Tienda A</h3>
-                <p>20% de descuento en toda la tienda hasta el 30 de abril.</p>
-            </article>
-            <article>
-                <h3>Promo 2x1 en Comidas</h3>
-                <p>Válido de lunes a miércoles en Patio de Comidas.</p>
-            </article>
+        <section class="mb-5">
+            <h2 class="mb-4">Promociones Destacadas</h2>
+            <div class="row">
+                <?php if ($destacadas && $destacadas->num_rows > 0): ?>
+                    <?php while ($promo = $destacadas->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-3 d-flex">
+                            <div class="card w-100">
+                                <img src="<?= !empty($promo['rutaImagen']) ? '../' . htmlspecialchars($promo['rutaImagen']) : '../assets/img/default.jpg' ?>" class="promo-destacada-img" alt="Imagen promoción">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($promo['textoPromo']) ?></h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-info text-dark">Desde: <?= htmlspecialchars($promo['fechaDesdePromo']) ?></span>
+                                        <span class="badge bg-info text-dark">Hasta: <?= htmlspecialchars($promo['fechaHastaPromo']) ?></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center">No hay promociones destacadas.</div>
+                    </div>
+                <?php endif; ?>
+            </div>
         </section>
+
         <section>
-            <h2>Novedades</h2>
-            <ul>
-                <li>Nuevo local de tecnología abrió en el segundo piso.</li>
-                <li>Horarios especiales por feriado este fin de semana.</li>
-            </ul>
+            <h2 class="mb-4">Novedades</h2>
+            <?php if ($novedades && $novedades->num_rows > 0): ?>
+                <div id="novedadesCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php $i = 0; while ($novedad = $novedades->fetch_assoc()): ?>
+                            <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+                                <div class="card mx-auto" style="max-width: 600px;">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= htmlspecialchars($novedad['textoNovedad']) ?></h5>
+                                        <p class="card-text">
+                                            <span class="badge bg-secondary">Desde: <?= htmlspecialchars($novedad['fechaDesdeNovedad']) ?></span>
+                                            <span class="badge bg-secondary">Hasta: <?= htmlspecialchars($novedad['fechaHastaNovedad']) ?></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php $i++; endwhile; ?>
+                    </div>
+                    <?php if ($novedades->num_rows > 1): ?>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#novedadesCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-info text-center">No hay novedades para mostrar.</div>
+            <?php endif; ?>
         </section>
     </main>
 
