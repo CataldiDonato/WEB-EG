@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("i", $idUso);
     $stmt->execute();
 
-    header("Location: mostrarusopromociones.php");
+    header("Location: mostrarusopromociones.php?promo=ok");
     exit();
 
 }

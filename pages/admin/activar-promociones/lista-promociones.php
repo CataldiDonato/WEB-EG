@@ -7,7 +7,24 @@ $offset = ($pagina - 1) * $porPagina;
 $totalPromocionesQuery = $conn->query("SELECT COUNT(*) AS total FROM promociones");
 $totalPromociones = $totalPromocionesQuery->fetch_assoc()['total'];
 $totalPaginas = max(1, ceil($totalPromociones / $porPagina));
-$sql = "SELECT * FROM promociones LIMIT $porPagina OFFSET $offset";
+
+// buscar promociones
+$buscar = isset($_GET['buscar']) ? $conn->real_escape_string(trim($_GET['buscar'])) : '';
+
+if (!empty($buscar)) {
+    $sql = "SELECT * FROM promociones 
+            WHERE estadoPromo LIKE '%$buscar%' 
+                OR idCategoriaCliente LIKE '%$buscar%'
+            LIMIT $porPagina OFFSET $offset";
+
+    $totalLocalesQuery = $conn->query("SELECT COUNT(*) AS total FROM promociones 
+        WHERE estadoPromo LIKE '%$buscar%' 
+            OR idCategoriaCliente LIKE '%$buscar%'");
+    $totalLocales = $totalLocalesQuery->fetch_assoc()['total'];
+} else {
+    $sql = "SELECT * FROM promociones LIMIT $porPagina OFFSET $offset";
+}
+
 $resultado = $conn->query($sql);
 $promociones = [];
 if ($resultado && $resultado->num_rows > 0) {
@@ -29,6 +46,17 @@ if ($resultado && $resultado->num_rows > 0) {
 
 <div class="container">
     <h2 class="mb-4 title-lista-promociones">Listado de Promociones</h2>
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por la categoria del cliente o el estado de la promo" value="<?= isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : '' ?>">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+        <div class="col-md-2">
+            <a href="lista-promociones.php" class="btn btn-secondary w-100">Limpiar</a>
+        </div>
+    </form>
     <?php if (count($promociones) > 0): ?>
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -83,7 +111,7 @@ if ($resultado && $resultado->num_rows > 0) {
             <ul class="pagination">
                 <?php if ($pagina > 1): ?>
                     <li class="page-item">
-                        <a class="page-link" href="?pagina=<?= $pagina - 1 ?>">Anterior</a>
+                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&buscar=<?= urlencode($buscar) ?>">Anterior</a>
                     </li>
                 <?php else: ?>
                     <li class="page-item disabled"><span class="page-link">Anterior</span></li>
@@ -91,7 +119,7 @@ if ($resultado && $resultado->num_rows > 0) {
                 <li class="page-item active"><span class="page-link"><?= $pagina ?></span></li>
                 <?php if ($pagina < $totalPaginas): ?>
                     <li class="page-item">
-                        <a class="page-link" href="?pagina=<?= $pagina + 1 ?>">Siguiente</a>
+                        <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&buscar=<?= urlencode($buscar) ?>">Siguiente</a>
                     </li>
                 <?php else: ?>
                     <li class="page-item disabled"><span class="page-link">Siguiente</span></li>

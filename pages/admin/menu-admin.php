@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="admin-menu.css">
 </head>
 <body class="body-admin">
-
     <div class="admin-menu">
         <h1>Menú Administrador</h1>
         <a href="./locales/gestion-locales.php" class="btn btn-primary">
@@ -23,8 +22,8 @@
         <a href="./crear-novedades/novedades.php" class="btn btn-info">
             📰 Gestionar Novedades
         </a>
-        <a href="#" class="btn btn-danger">
-            🚪 Cerrar Sesión
+        <a href="../perfil.php" class="btn btn-danger">
+            🛒 volver al perfil
         </a>
     </div>
 </body>

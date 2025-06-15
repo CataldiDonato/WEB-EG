@@ -11,7 +11,21 @@ $totalLocalesQuery = $conn->query("SELECT COUNT(*) AS total FROM locales");
 $totalLocales = $totalLocalesQuery->fetch_assoc()['total'];
 
 // Obtener locales paginados
-$sql = "SELECT * FROM locales LIMIT $porPagina OFFSET $offset";
+$buscar = isset($_GET['buscar']) ? $conn->real_escape_string(trim($_GET['buscar'])) : '';
+
+if (!empty($buscar)) {
+    $sql = "SELECT * FROM promociones 
+            WHERE estado LIKE '%$buscar%' 
+                OR rubroLocal LIKE '%$buscar%'
+            LIMIT $porPagina OFFSET $offset";
+    $totalLocalesQuery = $conn->query("SELECT COUNT(*) AS total FROM promociones 
+        WHERE estado LIKE '%$buscar%' 
+        WHERE ubicacionLocal LIKE '%$buscar%' 
+        OR rubroLocal LIKE '%$buscar%'");
+    $totalLocales = $totalLocalesQuery->fetch_assoc()['total'];
+} else {
+    $sql = "SELECT * FROM  LIMIT $porPagina OFFSET $offset";
+}
 $resultado = $conn->query($sql);
 ?>
 
@@ -46,7 +60,7 @@ $resultado = $conn->query($sql);
                     <input type="text" name="rubroLocal" class="form-control" placeholder="Rubro del local" required />
                 </div>
                 <div class="col-md-6">
-                    <input type="number" name="codUsuario" class="form-control" placeholder="Código de usuario" required />
+                    <input type="number" name="codUsuario" class="form-control" placeholder="Id de usuario" required />
                 </div>
                 <div class="col-12 text-end">
                     <button type="submit" class="btn btn-success">Agregar</button>
@@ -56,6 +70,17 @@ $resultado = $conn->query($sql);
     </div>
 
     <h2 class="mb-3 title-gestion-locales">Lista de Locales</h2>
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por ubicación o rubro" value="<?= isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : '' ?>">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+        <div class="col-md-2">
+            <a href="gestion-locales.php" class="btn btn-secondary w-100">Limpiar</a>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-striped table-bordered align-middle">
             <thead class="table-dark">
@@ -64,7 +89,7 @@ $resultado = $conn->query($sql);
                     <th>Nombre</th>
                     <th>Ubicación</th>
                     <th>Rubro</th>
-                    <th>Código Usuario</th>
+                    <th>Id Usuario</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -99,7 +124,7 @@ $resultado = $conn->query($sql);
         <ul class="pagination">
             <?php if ($pagina > 1): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>">Anterior</a>
+                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&buscar=<?= urlencode($buscar) ?>">Anterior</a>
                 </li>
             <?php else: ?>
                 <li class="page-item disabled"><span class="page-link">Anterior</span></li>
@@ -109,7 +134,7 @@ $resultado = $conn->query($sql);
 
             <?php if ($pagina * $porPagina < $totalLocales): ?>
                 <li class="page-item">
-                    <a class="page-link" href="?pagina=<?= $pagina + 1 ?>">Siguiente</a>
+                    <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&buscar=<?= urlencode($buscar) ?>">Siguiente</a>
                 </li>
             <?php else: ?>
                 <li class="page-item disabled"><span class="page-link">Siguiente</span></li>

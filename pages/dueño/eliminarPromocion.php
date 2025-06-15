@@ -12,6 +12,6 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("i", $id);
 
     $stmt->execute();
-    header("Location: ../dueño/menu-dueño.php");
+    header("Location: ../dueño/menu-dueño.php?eliminado=ok");
 }
 ?>
