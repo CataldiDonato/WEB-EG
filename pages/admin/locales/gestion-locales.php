@@ -6,27 +6,35 @@ $porPagina = 5;
 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina - 1) * $porPagina;
 
-// Obtener total de locales
-$totalLocalesQuery = $conn->query("SELECT COUNT(*) AS total FROM locales");
-$totalLocales = $totalLocalesQuery->fetch_assoc()['total'];
-
-// Obtener locales paginados
+// Filtro de búsqueda
 $buscar = isset($_GET['buscar']) ? $conn->real_escape_string(trim($_GET['buscar'])) : '';
 
 if (!empty($buscar)) {
-    $sql = "SELECT * FROM promociones 
-            WHERE estado LIKE '%$buscar%' 
-                OR rubroLocal LIKE '%$buscar%'
+    $sql = "SELECT * FROM locales 
+            WHERE nombreLocal LIKE '%$buscar%' 
+            OR ubicacionLocal LIKE '%$buscar%' 
+            OR rubroLocal LIKE '%$buscar%' 
             LIMIT $porPagina OFFSET $offset";
-    $totalLocalesQuery = $conn->query("SELECT COUNT(*) AS total FROM promociones 
-        WHERE estado LIKE '%$buscar%' 
-        WHERE ubicacionLocal LIKE '%$buscar%' 
-        OR rubroLocal LIKE '%$buscar%'");
+    
+    $totalQuery = "SELECT COUNT(*) AS total FROM locales 
+        WHERE nombreLocal LIKE '%$buscar%' 
+            OR ubicacionLocal LIKE '%$buscar%' 
+            OR rubroLocal LIKE '%$buscar%'";
+} else {
+    $sql = "SELECT * FROM locales LIMIT $porPagina OFFSET $offset";
+    $totalQuery = "SELECT COUNT(*) AS total FROM locales";
+}
+
+$resultado = $conn->query($sql);
+if (!$resultado) {
+    die("Error en la consulta de locales: " . $conn->error);
+}
+$totalLocalesQuery = $conn->query($totalQuery);
+if ($totalLocalesQuery) {
     $totalLocales = $totalLocalesQuery->fetch_assoc()['total'];
 } else {
-    $sql = "SELECT * FROM  LIMIT $porPagina OFFSET $offset";
+    die("Error en la consulta COUNT: " . $conn->error);
 }
-$resultado = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
