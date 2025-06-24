@@ -18,29 +18,10 @@ if (isset($_POST['submit'])) {
     $stmt->bind_param("i", $_SESSION['idUser']);
     $stmt->execute();
     $resultado = $stmt->get_result();
-
     $fila = $resultado->fetch_assoc();
 
     if (!$fila) {
-        echo '
-            <div class="container mt-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="alert alert-danger d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                                <use xlink:href="#exclamation-triangle-fill"/>
-                            </svg>
-                            <div>
-                                <h4 class="alert-heading">¡Atención!</h4>
-                                <p>No se encontró un local asociado a este usuario.</p>
-                                <hr>
-                                <a href="javascript:history.back()" class="btn btn-outline-danger mt-2">Volver atrás</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            ';
+        header("Location: menu-dueño.php?error=No se encontró un local asociado a este usuario.");
         exit;
     }
 
@@ -57,32 +38,34 @@ if (isset($_POST['submit'])) {
     $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
     if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
         if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagenAbsoluta)) {
-            echo '<div class="alert alert-danger">Error al subir la imagen.</div>';
-            $rutaImagenWeb = '';
+            header("Location: menu-dueño.php?error=Error al subir la imagen.");
+            exit;
         }
     } else {
-        echo '<div class="alert alert-warning">Formato de imagen no permitido.</div>';
-        $rutaImagenWeb = '';
+        header("Location: menu-dueño.php?error=Formato de imagen no permitido.");
+        exit;
     }
 
     if (empty($textoPromo) || empty($fechaDesdePromo) || empty($fechaHastaPromo) || empty($categoriaCliente)) {
-        echo '<div class="alert alert-danger">Por favor, complete todos los campos.</div>';
+        header("Location: menu-dueño.php?error=Por favor, complete todos los campos.");
+        exit;
     } else {
         $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagenWeb);
 
         if ($stmt->execute()) {
-            echo '<div class="alert alert-success">Promoción cargada exitosamente.</div>';
+            header("Location: menu-dueño.php?promo=ok");
+            exit();
         } else {
-            echo '<div class="alert alert-danger">Error al cargar la promoción: ' . $conn->error . '</div>';
+            header("Location: menu-dueño.php?error=" . urlencode($conn->error));
+            exit();
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,7 +102,7 @@ if (isset($_POST['submit'])) {
                     echo '<div><strong>Categoría de cliente:</strong> ' . $promocion['idCategoriaCliente'] . '</div>';
                     echo '<div><strong>Imagen:</strong> <img src="../../' . $promocion['rutaImagen'] . '" alt="Imagen de la promoción" style="max-width: 200px; max-height: 200px;"></div>';
                     echo '<br>';  
-                    echo '<button class="btn btn-danger" onclick="window.location.href=\'eliminarPromocion.php?id=' . $promocion['id'] . '\'">Eliminar</button>';
+                    echo '<button class="btn btn-danger btn-eliminar-promo" data-id="' . $promocion['id'] . '">Eliminar</button>';                  
                     echo '</div>';
                 }
             } else {
@@ -188,15 +171,62 @@ if (isset($_POST['submit'])) {
                 <input type="submit" name="submit" class="btn btn-primary" value="Cargar Promoción">
             </div>
         </form>
-                </div>
-                </div>
-            </div>
-            <div>
-                <input type="submit" name="submit" class="buton-login" value="submit">
-            </div>
-        </form>
     </div>
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<?php if (isset($_GET['promo']) && $_GET['promo'] === 'ok') : ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '¡Promoción cargada!',
+    text: 'La promoción se cargó exitosamente.',
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Aceptar'
+});
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['error'])) : ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error al cargar la promoción',
+    text: <?= json_encode($_GET['error']) ?>,
+    confirmButtonColor: '#d33',
+    confirmButtonText: 'Aceptar'
+});
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['eliminado']) && $_GET['eliminado'] === 'ok') : ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '¡Promoción eliminada!',
+    text: 'La promoción se eliminó correctamente.',
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Aceptar'
+});
+</script>
+<?php endif; ?>
+<script>
+document.querySelectorAll('.btn-eliminar-promo').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const promoId = btn.getAttribute('data-id');
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¡Esta acción eliminará la promoción!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'eliminarPromocion.php?id=' + promoId;
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

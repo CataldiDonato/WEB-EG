@@ -5,17 +5,30 @@ $porPagina = 5;
 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina - 1) * $porPagina;
 
+$buscar = isset($_GET['buscar']) ? $conn->real_escape_string(trim($_GET['buscar'])) : '';
+
 $usuarios = [];
 $total = 0;
 $totalPaginas = 1;
 
 try {
-    $totalQuery = $conn->query("SELECT COUNT(*) AS total FROM users WHERE id_tipo = 3");
+    if (!empty($buscar)) {
+        $totalQuery = $conn->query("SELECT COUNT(*) AS total FROM users 
+            WHERE id_tipo = 3 AND emailUser LIKE '%$buscar%'");
+
+        $sql = "SELECT * FROM users 
+                WHERE id_tipo = 3 AND emailUser LIKE '%$buscar%' 
+                LIMIT $porPagina OFFSET $offset";
+    } else {
+        $totalQuery = $conn->query("SELECT COUNT(*) AS total FROM users WHERE id_tipo = 3");
+        $sql = "SELECT * FROM users WHERE id_tipo = 3 LIMIT $porPagina OFFSET $offset";
+    }
+
     if ($totalQuery) {
         $total = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = max(1, ceil($total / $porPagina));
     }
-    $sql = "SELECT * FROM users WHERE id_tipo = 3 LIMIT $porPagina OFFSET $offset";
+
     $resultado = $conn->query($sql);
     if ($resultado && $resultado->num_rows > 0) {
         while ($row = $resultado->fetch_assoc()) {
@@ -39,6 +52,17 @@ try {
 
 <div class="container">
     <h2 class="mb-4 title-dueños-locales-admin">Usuarios (Dueños de locales)</h2>
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por email" value="<?= isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : '' ?>">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+        <div class="col-md-2">
+            <a href="lista-dueños-locales.php" class="btn btn-secondary w-100">Limpiar</a>
+        </div>
+    </form>
     <?php if (count($usuarios) > 0): ?>
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -86,7 +110,7 @@ try {
         <nav aria-label="Paginación de locales" class="d-flex justify-content-center my-4">
             <ul class="pagination">
                 <li class="page-item <?= $pagina <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= max(1, $pagina - 1) ?>">Anterior</a>
+                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>&buscar=<?= urlencode($buscar) ?>">Anterior</a>
                 </li>
                 <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
                     <li class="page-item <?= $i == $pagina ? 'active' : '' ?>">
@@ -94,7 +118,7 @@ try {
                     </li>
                 <?php endfor; ?>
                 <li class="page-item <?= $pagina >= $totalPaginas ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= min($totalPaginas, $pagina + 1) ?>">Siguiente</a>
+                        <a class="page-link" href="?pagina=<?= $pagina + 1 ?>&buscar=<?= urlencode($buscar) ?>">Siguiente</a>
                 </li>
             </ul>
         </nav>
