@@ -57,6 +57,8 @@ try {
         </a>
         <a href="./crear-novedades/novedades.php" class="btn btn-info">
             📰 Gestionar Novedades
+        <a href="./gestionar-promociones-destacadas/promocionesDestacadas.php" class="btn btn-info">
+            🗞️​ Promociones destacadas
         </a>
         <a href="../perfil.php" class="btn btn-danger">
             🛒 volver al perfil
