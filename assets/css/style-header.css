@@ -1,8 +1,8 @@
 body, .main-content {
-    padding-top : 90px !important; /* Espacio para que no tape la navbar fija */
-    margin-left: 40px;  /* Ajusta según la altura de tu navbar */
+    padding-top : 90px !important;
+    margin-left: 40px;
   }
 
   .navbar {
-    z-index: 1050;  /* Bootstrap ya tiene este valor por defecto */
+    z-index: 1050;
 }

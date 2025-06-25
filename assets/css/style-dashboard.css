@@ -1,17 +1,77 @@
 body {
     overflow-x: hidden;
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
 }
+
+.titleDestacadas {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.img-zoom-container {
+    overflow: hidden;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
 .promo-destacada-img {
     width: 100%;
-    height: 180px;
+    height: auto;
     object-fit: cover;
-    border-radius: 0.5rem 0.5rem 0 0;
-    background: #f8f9fa;
     display: block;
+    transition: transform 0.4s ease-in-out;
 }
-.card.w-100 {
-    min-width: 0;
+
+.card:hover .promo-destacada-img {
+    transform: scale(1.1);
 }
-.row {
-    margin-right: 0;
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.badge {
+    font-size: 0.85rem;
+    margin-right: 0.25rem;
+}
+
+.card-title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #34495e;
+    text-transform: uppercase;
+}
+
+.card-text {
+    text-align: center;
+}
+.fecha-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.fecha-badge.desde {
+    background-color: #198754;
+}
+
+.fecha-badge.hasta {
+    background-color: #f0370d;
+}
+
+.fecha-badge:hover {
+    transform: scale(1.05);
 }
