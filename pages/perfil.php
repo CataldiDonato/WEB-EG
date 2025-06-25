@@ -1,39 +1,6 @@
 <?php
 include '../include/db.php';
 session_start();
-// // require '../php-jwt-token/php-jwt-login/vendor/autoload.php'; 
-// //session_start();
-// // use Firebase\JWT\JWT;
-// // use Firebase\JWT\Key;
-// // $key ='MESSI';
-// // if(isset($_COOKIE['token'])){
-// //     $token = $_COOKIE['token'];
-// //     $decoded = JWT::decode($token, new Key($key, 'HS256'));   
-// // }
-// $sql_check = "SELECT * FROM users WHERE emailUser = ?";
-// $stmt = $conn->prepare($sql_check);
-// $stmt->bind_param("s", $_SESSION['emailUser']);
-// $stmt->execute();
-// $resultado = $stmt->get_result();
-// var_dump($usuario);
-// foreach ($usuario as $campo => $valor) {
-//     echo $campo . ": " . $valor . "<br>";
-// }
-// $usuario = $resultado->fetch_assoc();
-
-// // if ($usuario) {
-// //     echo '<pre>';
-// //     var_dump($usuario);  // o print_r($usuario); si prefieres
-// //     echo '</pre>';
-// // } else {
-// //     echo "No se encontraron datos para este usuario.";
-// // }
-
-// if ($usuario['validado'] == 0){
-//     $usuarioValidado = false;
-// } else {
-//     $usuarioValidado = true;
-// }
 
 $email=$_SESSION['emailUser'];
 $sql_check = "SELECT * FROM users WHERE emailUser = ?";
@@ -41,7 +8,7 @@ $stmt = $conn->prepare($sql_check);
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $resultado = $stmt->get_result();
-//$usuarioValidado = $usuario['validado'] ;
+
 if ($resultado->num_rows === 1) {
     $usuario = $resultado->fetch_assoc();
     $usuarioValidado = $usuario['validado'];
@@ -82,7 +49,6 @@ if ($resultado->num_rows === 1) {
         <?php if ($_SESSION["tipoUser"] == 3): ?>
             <div class="d-flex gap-3 mb-4">
                 <a href="dueño/menu-dueño.php" class="btn btn-primary">Ir a Panel del Dueño</a>
-                <a href="dueño/mostrarusopromociones.php" class="btn btn-secondary">Ver uso de promociones</a>
             </div>
         <?php endif; ?>
         <?php if ($_SESSION["tipoUser"] == 1): ?>

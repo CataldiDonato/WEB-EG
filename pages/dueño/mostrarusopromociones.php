@@ -55,7 +55,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <div class="container py-5">
     <h1 class="mb-4">Historial de Uso de Promociones</h1>
-
+    <button class="btn btn-primary mt-3" onclick="window.location.href='menu-dueño.php'">Volver</button>
 <?php
 echo "<p class='text-muted'>ID de Usuario: <strong>" . $_SESSION['idUser'] . "</strong></p>";
 
@@ -128,16 +128,5 @@ if ($resultado->num_rows === 1) {
     echo '<div class="alert alert-danger">No se encontró el local en la base de datos.</div>';
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostrar promociones</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap-css/bootstrap.min.css">
-</head>
-<body>
-    <button class="btn btn-primary mt-3" onclick="window.location.href='../perfil.php'">Volver</button>
 </body>
 </html>
