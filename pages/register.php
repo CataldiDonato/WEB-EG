@@ -85,8 +85,8 @@ if (isset($_POST['submit'])) {
                 $mail->isHTML(true);
                 $mail->Subject = 'Valida tu cuenta';
                 $mail->Body    = "Hola,<br><br>Haz clic en el siguiente enlace para validar tu correo:<br><br>
-                                  <a href='http://localhost/web-eg/pages/validarEmail.php?email=$email&token=$tokenValidacionCorreo'>
-                                  Validar cuenta</a>";
+                                <a href='http://localhost/web-eg/pages/validarEmail.php?email=$email&token=$tokenValidacionCorreo'>
+                                Validar cuenta</a>";
             
                 $mail->send();
                 header("Location: login.php");
@@ -117,36 +117,37 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../assets/css/style-register.css">
 </head>
 <body>
-    <
     <div class="container">
         <div id="register-row" class="row justify-content-center align-items-center">
             <div id="register-column" class="col-md-6">
                 <div id="register-box" class="col-md-12">
                     <form id="register-form" class="form" action="register.php" method="post">
-                        <h3 class="text-center text-reg">Create Account</h3>
+                        <h3 class="text-center text-reg">Crea tu cuenta</h3>
                         <div class="form-group mb-3">
-                            <label for="email" class="text-reg">Email:</label>
+                            <label for="email" class="text-reg">Correo electronico:</label>
                             <input type="email" name="email" id="email" class="form-control" required>
                         </div>
                         <div id="tipoUser">
-                            <input type="radio" name="tipoUser" id="cliente" value="cliente" checked>
-                            <label for="cliente" class="text-reg">Cliente</label><br>
-                            <input type="radio" name="tipoUser" id="duenio" value="dueño">
-                            <label for="duenio" class="text-reg">Dueño</label><br>
+                            <label for="">Tipo de cuenta:</label>
+                            <select name="tipoUser" id="tipoUser">
+                                <option value="cliente">Cliente</option>
+                                <option value="duenio">Dueño</option>
+                            </select>
+                            <br>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="password" class="text-reg">Password:</label>
+                            <label for="password" class="text-reg">Contraseña:</label>
                             <input type="password" name="password" id="password" class="form-control" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="confirm-password" class="text-reg">Confirm Password:</label>
+                            <label for="confirm-password" class="text-reg">Confirmar contraseña:</label>
                             <input type="password" name="confirm_password" id="confirm-password" class="form-control" required>
                         </div>
                         <div class="form-group text-center">
-                            <input type="submit" name="submit" class="buton-register" value="Register">
+                            <input type="submit" name="submit" class="buton-register" value="Registrarse" style="border-radius: 5px; background-color: rgba(226,226,226);">
                         </div>
                         <div id="login-link" class="text-center mt-2">
-                            <a href="login.php" class="text-reg">Already have an account? Login here</a>
+                            <a href="login.php" class="text-reg link-register">¿Ya tienes una cuenta? Inicia sesion aquí.</a>
                         </div>
                         
                         

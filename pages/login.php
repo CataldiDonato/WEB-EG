@@ -105,22 +105,22 @@ if (isset($_POST['submit'])) {
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
                         <form id="login-form" class="form" action="" method="post">
-                            <h3 class="text-center text-login">Login</h3>
+                            <h3 class="text-center text-login">Iniciar sesion</h3>
                             
                             <!-- Mostrar mensaje de error si existe -->
                             <?php if (!empty($error)) echo $error; ?>
 
                             <div class="form-group">
-                                <label for="email" class="text-login">Email:</label><br>
+                                <label for="email" class="text-login">Correo electronico:</label><br>
                                 <input type="text" name="email" id="email" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="password" class="text-login">Password:</label><br>
+                                <label for="password" class="text-login">Contraseña:</label><br>
                                 <input type="password" name="password" id="password" class="form-control">
                             </div>
                             <div class="form-group">
-                                <input type="submit" name="submit" class="buton-login" value="submit">
-                                <a href="register.php" class="text-login">Register here</a>
+                                <input type="submit" name="submit" class="buton-login" value="Iniciar sesion" style="border-radius: 5px; background-color: rgba(226,226,226);">
+                                <a href="register.php" class="text-login link-register">¿Aun no te has registrado? Registrate aquí.</a>
                             </div>
                         </form>
                     </div>
