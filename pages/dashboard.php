@@ -81,10 +81,14 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
             <?php endif; ?>
         </section>
     </main>
-
+    <br>
     <footer>
-        <p>&copy; 2025 Shopping Promos. Todos los derechos reservados.</p>
+       <?php
+        include 'footer.php';
+        ?>
     </footer>
+    
     <script src="../assets/js/bootstrap-js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
