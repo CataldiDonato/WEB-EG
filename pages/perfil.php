@@ -100,41 +100,53 @@ if ($resultado->num_rows === 1) {
             $stmt->bind_param("i", $_SESSION['idUser']);
             $stmt->execute();
             $resultado = $stmt->get_result();
-
-            if ($resultado->num_rows > 0):
-                while ($promo = $resultado->fetch_assoc()):
-                    ?>
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h4 class="card-title">Promoción: <?php echo htmlspecialchars($promo['codPromo']); ?></h4>
-                            <p class="card-text">Estado: <?php echo htmlspecialchars($promo['estado']); ?></p>
-
-                            <?php
-                            $sql2 = "SELECT * FROM promociones WHERE id = ?";
-                            $stmt2 = $conn->prepare($sql2);
-                            $stmt2->bind_param("i", $promo['codPromo']);
-                            $stmt2->execute();
-                            $resultado2 = $stmt2->get_result();
-
-                            while ($detalle = $resultado2->fetch_assoc()):
-                            ?>
-                                <p class="card-text"><strong>Nombre:</strong> <?php echo htmlspecialchars($detalle['textoPromo']); ?></p>
-                                <p class="card-text"><strong>Desde:</strong> <?php echo htmlspecialchars($detalle['fechaDesdePromo']); ?></p>
-                                <p class="card-text"><strong>Hasta:</strong> <?php echo htmlspecialchars($detalle['fechaHastaPromo']); ?></p>
-                                <div class="mb-3">
-                                    <strong>Imagen:</strong><br>
-                                    <img src="../<?php echo $detalle['rutaImagen']; ?>" alt="Imagen de la promoción" class="img-thumbnail" style="max-width: 200px;">
-                                </div>
-                                <button class="btn btn-success">Descargar cupón</button>
-                            <?php endwhile; ?>
-                        </div>
-                    </div>
-                <?php endwhile;
-            else:
-                echo '<div class="alert alert-info">No hay promociones.</div>';
-            endif;
             ?>
+
+            <?php if ($resultado->num_rows > 0): ?>
+                <div class="row">
+                    <?php while ($promo = $resultado->fetch_assoc()): ?>
+                        <div class="col-12 col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 class="card-title">Promoción: <?= htmlspecialchars($promo['codPromo']) ?></h4>
+                                    <p class="card-text">Estado: <?= htmlspecialchars($promo['estado']) ?></p>
+
+                                    <?php
+                                    $sql2 = "SELECT * FROM promociones WHERE id = ?";
+                                    $stmt2 = $conn->prepare($sql2);
+                                    $stmt2->bind_param("i", $promo['codPromo']);
+                                    $stmt2->execute();
+                                    $resultado2 = $stmt2->get_result();
+
+                                    while ($detalle = $resultado2->fetch_assoc()):
+                                    ?>
+                                        <p class="card-text"><strong>Nombre:</strong> <?= htmlspecialchars($detalle['textoPromo']) ?></p>
+                                        <p class="card-text"><strong>Desde:</strong> <?= htmlspecialchars($detalle['fechaDesdePromo']) ?></p>
+                                        <p class="card-text"><strong>Hasta:</strong> <?= htmlspecialchars($detalle['fechaHastaPromo']) ?></p>
+                                        <div class="mb-3">
+                                            <strong>Imagen:</strong><br>
+                                            <img src="../<?= $detalle['rutaImagen'] ?>" alt="Imagen de la promoción" class="img-thumbnail" style="max-width: 200px;">
+                                        </div>
+                                        <a href="descargar_cupon.php?
+                                            id=<?= $promo['codPromo'] ?>&
+                                            texto=<?= urlencode($detalle['textoPromo']) ?>&
+                                            desde=<?= urlencode($detalle['fechaDesdePromo']) ?>&
+                                            hasta=<?= urlencode($detalle['fechaHastaPromo']) ?>"
+                                        class="btn btn-success">
+                                        Descargar cupón
+                                        </a>
+
+                                    <?php endwhile; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-info">No hay promociones.</div>
+            <?php endif; ?>
         <?php endif; ?>
+
     </div>
 </body>
 </html>
