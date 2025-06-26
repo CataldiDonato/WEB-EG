@@ -1,7 +1,12 @@
 body {
+    background-image: url(https://images.unsplash.com/photo-1580793241553-e9f1cce181af?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2VudHJvJTIwY29tZXJjaWFsfGVufDB8fDB8fHww);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    color: white;
   }
 
   #login .container #login-row #login-column #login-box {
@@ -13,3 +18,26 @@ body {
   #login .container #login-row #login-column #login-box #login-form #register-link {
     margin-top: -85px;
   }
+  .container #login-box{
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.594);
+    background-color: rgba(0, 0, 0, 0.44);
+    border-radius: 20px;
+  }
+  input, button[type="submit"] {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 1rem !important;
+}
+.link-register {
+    text-shadow: 0 0 15px rgb(0, 0, 0);
+    color: #7ebff5;
+    font-weight: bold;
+    text-decoration: underline 3px #7ebff5;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.2s;
+}
+.link-register:hover {
+  color: #3963a2 !important;
+    text-decoration-color: #3963a2;
+}
