@@ -64,6 +64,14 @@ try {
             <label for="fechaHastaNovedad" class="form-label">Fecha Hasta</label>
             <input type="date" class="form-control" id="fechaHastaNovedad" name="fechaHastaNovedad" required>
         </div>
+        <div class="mb-3">
+            <label for="categoriaCliente" class="form-label">Categoría Cliente</label>
+            <select class="form-control" id="categoriaCliente" name="categoriaCliente" required>
+                <option value="1">Inicial</option>
+                <option value="2">Medium</option>
+                <option value="3">Premium</option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Guardar Novedad</button>
     </form>
     <div class="text-center mt-3">

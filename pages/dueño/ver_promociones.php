@@ -44,8 +44,34 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Promociones</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.form-eliminar').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // evita envío inmediato
+            Swal.fire({
+                title: "¿Eliminar promoción?",
+                text: "Esta acción no se puede deshacer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = form.action + "?idPromo=" + form.querySelector('input[name="idPromo"]').value;
+                }
+            });
+        });
+    });
+});
+</script>
+
 <body>
     
     <h1 style="text-align: center;">Promociones activas</h1>
@@ -84,7 +110,10 @@ if (session_status() == PHP_SESSION_NONE) {
                         echo '<div><strong>Categoría de cliente:</strong> ' . htmlspecialchars($promocion['idCategoriaCliente']) . '</div>';
                         echo '<div><strong>Imagen:</strong><br><img src="../../' . htmlspecialchars($promocion['rutaImagen']) . '" alt="Imagen de la promoción" style="max-width: 100%; height: auto;"></div>';
                         echo '<br>';
-                        echo '<button class="btn btn-danger btn-eliminar-promo" data-id="' . $promocion['id'] . '">Eliminar</button>';
+                        echo '<form method="GET" action="eliminarPromocion.php" class="form-eliminar">';
+                        echo '<input type="hidden" name="idPromo" value="' . $promocion['id'] . '">';
+                        echo '<button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i> Eliminar</button>';
+                        echo '</form>';
                         echo '</div>';
                         echo '</div>';
                     }
@@ -97,4 +126,6 @@ if (session_status() == PHP_SESSION_NONE) {
             ?>
     </div>
 </body>
+
+
 </html>

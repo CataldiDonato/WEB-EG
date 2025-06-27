@@ -16,16 +16,35 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
     <link rel="stylesheet" href="../assets/css/bootstrap-css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style-header.css">
     <link rel="stylesheet" href="../assets/css/style-dashboard.css">
+    <style>
+    body, html {
+    margin: 0;
+    padding: 0;
+    }
+    .hero-image {
+    background-image: url('../assets/img/portada.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    margin-top: -56px;
+    }
+  </style>
 </head>
 <body>
+
 <?php include 'header.php'; ?>
+
+<div class="hero-image"></div>
+
 <main class="container py-4">
     <section class="mb-5">
         <h2 class="mb-4 titleDestacadas">Promociones Destacadas</h2>
         <div class="row">
             <?php if ($destacadas && $destacadas->num_rows > 0): ?>
                 <?php while ($promo = $destacadas->fetch_assoc()): ?>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+
                         <div class="card shadow-sm h-100">
                             <div class="img-zoom-container">
                                 <img src="<?= !empty($promo['rutaImagen']) ? '../' . htmlspecialchars($promo['rutaImagen']) : '../assets/img/default.jpg' ?>"
@@ -50,7 +69,7 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
     </section>
 
     <section>
-        <h2 class="mb-4">Novedades</h2>
+        <h2 class="mb-4 text-center fw-bold fs-2">Últimas Novedades!</h2>
         <?php if ($novedades && $novedades->num_rows > 0): ?>
             <div id="novedadesCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
@@ -59,10 +78,10 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
                             <div class="card mx-auto shadow-sm" style="max-width: 600px;">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= htmlspecialchars($novedad['textoNovedad']) ?></h5>
-                                    <p class="card-text">
+                                    <!-- <p class="card-text">
                                         <span class="badge bg-secondary">Desde: <?= date('d/m/Y', strtotime($novedad['fechaDesdeNovedad'])) ?></span>
                                         <span class="badge bg-secondary">Hasta: <?= date('d/m/Y', strtotime($novedad['fechaHastaNovedad'])) ?></span>
-                                    </p>
+                                    </p> -->
                                 </div>
                             </div>
                         </div>
@@ -83,6 +102,8 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
             <div class="alert alert-info text-center">No hay novedades para mostrar.</div>
         <?php endif; ?>
     </section>
+
+    
 </main>
 
 <?php include 'footer.php'; ?>
