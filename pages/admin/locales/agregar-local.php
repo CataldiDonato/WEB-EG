@@ -5,6 +5,10 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
+
+
 $token = $_COOKIE['token'];
 $clave_secreta = "MESSI"; // misma usada al generar el token
 
@@ -37,7 +41,7 @@ $codUsuario = $_POST['codUsuario'];
 
 $sql = "INSERT INTO locales (nombreLocal, ubicacionLocal , rubroLocal, codUsuario) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $nombreLocal, $ubicacionLocal , $rubroLocal, $codUsuario);
+$stmt->bind_param("ssss", $nombreLocal, $ubicacionLocal, $rubroLocal, $codUsuario);
 $stmt->execute();
 
 header("Location: gestion-locales.php?agregado=ok");

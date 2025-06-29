@@ -6,25 +6,25 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 if (isset($_POST['submit'])) {
-    $asunto = $_POST['asunto'];
-    $mensaje = $_POST['mensaje'];
-    $email = $_SESSION['emailUser'];
+  $asunto = $_POST['asunto'];
+  $mensaje = $_POST['mensaje'];
+  $email = $_SESSION['emailUser'];
 
-    $asuntomail = "Usuario: " . $email . " tiene una consulta de: " . $asunto;
+  $asuntomail = "Usuario: " . $email . " tiene una consulta de: " . $asunto;
 
 
-    $mail = new PHPMailer(true); 
+  $mail = new PHPMailer(true);
 
-try {
+  try {
     $mail->SMTPDebug = 0;
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'donatocataldicode@gmail.com'; 
-    $mail->Password   = 'zdwi jcdm lyys coaf'; 
+    $mail->Username   = 'donatocataldicode@gmail.com';
+    $mail->Password   = 'zdwi jcdm lyys coaf';
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
@@ -33,40 +33,48 @@ try {
 
     $mail->isHTML(true);
     $mail->Subject = $asuntomail;
-    $mail->Body    = nl2br(htmlspecialchars($mensaje)); 
+    $mail->Body    = nl2br(htmlspecialchars($mensaje));
     echo "<script>
         alert('Mensaje enviado!');
         </script>";
     $mail->send();
-    } catch (Exception $e) {
-        echo "Error al enviar correo: {$mail->ErrorInfo}";
-        exit();
-    }
-
+  } catch (Exception $e) {
+    echo "Error al enviar correo: {$mail->ErrorInfo}";
+    exit();
+  }
 }
 
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Formulario de Contacto</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
     }
+
     body {
       display: flex;
       flex-direction: column;
     }
+
     main {
       flex: 1;
     }
+
+    .footerContacto {
+      margin-top: 120px;
+    }
   </style>
 </head>
+
 <body class="bg-light py-5">
 
   <main>
@@ -117,13 +125,11 @@ try {
     <br>
   </main>
 
-  <footer class="bg-dark text-white text-center py-3">
+  <footer class="bg-dark text-white text-center py-3 footerContacto">
     <?php include 'footer.php'; ?>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-
-
-

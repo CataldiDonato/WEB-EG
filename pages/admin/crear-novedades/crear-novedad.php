@@ -5,6 +5,10 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
+
+
 $token = $_COOKIE['token'];
 $clave_secreta = "MESSI"; // misma usada al generar el token
 
@@ -39,7 +43,7 @@ $categoriaCliente = $_POST['categoriaCliente'];
 
 $sql = "INSERT INTO novedades (textoNovedad, fechaDesdeNovedad , fechaHastaNovedad, idTipoUsuario) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssi", $textoNovedad, $fechaDesdeNovedad , $fechaHastaNovedad, $categoriaCliente);
+$stmt->bind_param("sssi", $textoNovedad, $fechaDesdeNovedad, $fechaHastaNovedad, $categoriaCliente);
 $stmt->execute();
 
 header("Location: novedades.php?agregado=ok");

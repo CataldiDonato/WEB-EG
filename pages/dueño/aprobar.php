@@ -5,6 +5,10 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
+
+
 $token = $_COOKIE['token'];
 $clave_secreta = "MESSI"; // misma usada al generar el token
 
@@ -45,7 +49,4 @@ if (isset($_GET['id'])) {
 
     header("Location: mostrarusopromociones.php?promo=ok");
     exit();
-
 }
-
-?>

@@ -1,6 +1,10 @@
 <?php
 include '../include/db.php';
 session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// use Firebase\JWT\JWT;
+// use Firebase\JWT\Key;
 
 // Verificar que exista la cookie
 if (!isset($_COOKIE['token'])) {
@@ -25,7 +29,7 @@ try {
     exit();
 }
 
-$email=$_SESSION['emailUser'];
+$email = $_SESSION['emailUser'];
 $sql_check = "SELECT * FROM users WHERE emailUser = ?";
 $stmt = $conn->prepare($sql_check);
 $stmt->bind_param("s", $email);
@@ -44,13 +48,28 @@ if ($resultado->num_rows === 1) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
     <link rel="stylesheet" href="../assets/css/bootstrap-css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style-header.css">
+    <style>
+        .footerPerfil {
+            margin-top: 190px;
+        }
+
+        #footerAdmin {
+            margin-bottom: 80px;
+        }
+
+        #footerDueño {
+            margin-bottom: 80px;
+        }
+    </style>
 </head>
+
 <body>
     <?php include 'header.php'; ?>
     <div class="container mt-4">
@@ -61,22 +80,22 @@ if ($resultado->num_rows === 1) {
                 <h2 class="card-title">Bienvenido, <?php echo $_SESSION['emailUser']; ?></h2>
                 <p class="card-text">Tipo de usuario: <strong><?php echo $_SESSION['tipoUser']; ?></strong></p>
                 <p class="card-text">
-                    <?php 
-                    echo $usuarioValidado ? 
-                        '<span class="badge bg-success">Email Validado</span>' : 
-                        '<span class="badge bg-warning text-dark">Valida tu Email para poder acceder a las promociones</span>'; 
+                    <?php
+                    echo $usuarioValidado ?
+                        '<span class="badge bg-success">Email Validado</span>' :
+                        '<span class="badge bg-warning text-dark">Valida tu Email para poder acceder a las promociones</span>';
                     ?>
                 </p>
             </div>
         </div>
         <?php if ($_SESSION["tipoUser"] == 3): ?>
             <div class="d-flex gap-3 mb-4">
-                <a href="dueño/menu-dueño.php" class="btn btn-primary">Ir a Panel del Dueño</a>
+                <a href="dueño/menu-dueño.php" class="btn btn-primary" id="footerDueño">Ir a Panel del Dueño</a>
             </div>
         <?php endif; ?>
         <?php if ($_SESSION["tipoUser"] == 1): ?>
             <div class="d-flex gap-3 mb-4">
-                <a href="admin/menu-admin.php" class="btn btn-primary">Ir a Panel del Admin</a>
+                <a href="admin/menu-admin.php" class="btn btn-primary" id="footerAdmin">Ir a Panel del Admin</a>
             </div>
         <?php endif; ?>
 
@@ -121,8 +140,8 @@ if ($resultado->num_rows === 1) {
                                             texto=<?= urlencode($detalle['textoPromo']) ?>&
                                             desde=<?= urlencode($detalle['fechaDesdePromo']) ?>&
                                             hasta=<?= urlencode($detalle['fechaHastaPromo']) ?>"
-                                        class="btn btn-success">
-                                        Descargar cupón
+                                            class="btn btn-success">
+                                            Descargar cupón
                                         </a>
 
                                     <?php endwhile; ?>
@@ -137,5 +156,9 @@ if ($resultado->num_rows === 1) {
         <?php endif; ?>
 
     </div>
+    <footer class="bg-dark text-white text-center py-3 footerPerfil">
+        <?php include 'footer.php'; ?>
+    </footer>
 </body>
+
 </html>
