@@ -4,6 +4,28 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 session_start();
+// Verificar que exista la cookie
+if (!isset($_COOKIE['token'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$token = $_COOKIE['token'];
+$clave_secreta = "MESSI"; // misma usada al generar el token
+
+try {
+    // Decodificar el token
+    $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
+
+    // Extraer el tipo de usuario
+    $id_tipo = $decoded->data->id_tipo ?? null;
+
+    // Si pasó todas las verificaciones, mostrar la página normalmente
+} catch (Exception $e) {
+    // Token inválido o expirado
+    header("Location: login.php");
+    exit();
+}
 
 if (!isset($_GET['id'])) {
     die('ID de cupón no especificado');
