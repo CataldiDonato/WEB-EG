@@ -3,8 +3,8 @@ include '../include/db.php';
 session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// use Firebase\JWT\JWT;
-// use Firebase\JWT\Key;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 // Verificar que exista la cookie
 if (!isset($_COOKIE['token'])) {

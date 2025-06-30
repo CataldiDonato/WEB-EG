@@ -8,6 +8,10 @@ use Firebase\JWT\Key;
 $idUsuario = null;
 $categoriaCliente = null;
 $promos = false;
+$totalPaginas = 1;
+$porPagina = 9;
+$pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
+$inicio = ($pagina - 1) * $porPagina;
 
 // Si el usuario está autenticado, obtenemos sus datos del token
 if ($usuario_autenticado && isset($decoded)) {
@@ -23,11 +27,24 @@ if ($usuario_autenticado && isset($decoded)) {
         $stmtCategoria->close();
 
         if ($categoriaCliente) {
+            // Contar total de promociones
+            $sqlCount = "SELECT COUNT(*) FROM promociones WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?";
+            $stmtCount = $conn->prepare($sqlCount);
+            $stmtCount->bind_param("i", $categoriaCliente);
+            $stmtCount->execute();
+            $stmtCount->bind_result($totalPromos);
+            $stmtCount->fetch();
+            $stmtCount->close();
+
+            $totalPaginas = max(1, ceil($totalPromos / $porPagina));
+
+            // Obtener promociones de la página actual
             $sqlPromo = "SELECT promociones.*, locales.nombreLocal FROM promociones 
                         INNER JOIN locales ON promociones.idcodLocal = locales.id 
-                        WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?";
+                        WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?
+                        LIMIT ?, ?";
             $stmtPromo = $conn->prepare($sqlPromo);
-            $stmtPromo->bind_param("i", $categoriaCliente);
+            $stmtPromo->bind_param("iii", $categoriaCliente, $inicio, $porPagina);
             $stmtPromo->execute();
             $promos = $stmtPromo->get_result();
         }
@@ -105,6 +122,17 @@ if ($usuario_autenticado && isset($decoded)) {
                 </div>
             <?php endif; ?>
         </div>
+        <?php if ($usuario_autenticado && $totalPaginas > 1): ?>
+            <nav aria-label="Paginación de promociones" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                        <li class="page-item <?= $i == $pagina ? 'active' : '' ?>">
+                            <a class="page-link" href="?pagina=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
     </div>
 </main>
 

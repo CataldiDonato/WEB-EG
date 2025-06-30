@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 session_start();
