@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 
@@ -22,48 +21,52 @@ try {
     // Extraer el tipo de usuario
     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    // Verificar si es dueño (id_tipo == 3)
+    // Verificar si es admin (id_tipo == 1)
     if ($id_tipo !== 3) {
-        header("Location: ../../dashboard.php");
+        header("Location: ../dashboard.php");
         exit();
     }
 
     // Si pasó todas las verificaciones, mostrar la página normalmente
 } catch (Exception $e) {
     // Token inválido o expirado
-    header("Location: ../../login.php");
+    header("Location: login.php");
     exit();
-}
-
-include '../../include/db.php';
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MenuDueño</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <title>Menú Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../admin/admin-menu.css">
+    <link rel="stylesheet" href="../../assets/css/bootstrap-css/bootstrap.min.css">
 </head>
-<body class="bg-light">
-    <div class="container mt-5 text-center">
-        <h2 class="mb-4">Panel del Dueño</h2>
 
-        <div class="mb-3">
-            <button class="btn btn-primary" onclick="window.location.href='../perfil.php'">Volver</button>
-        </div>
-        <div class="mb-3">
-            <button class="btn btn-success" onclick="window.location.href='ver_promociones.php'">Ver promociones</button>
-        </div>
-        <div class="mb-3">
-            <button class="btn btn-info" onclick="window.location.href='cargar_promocion.php'">Cargar promoción</button>
-        </div>
-        <div class="mb-3">
-            <button class="btn btn-warning" onclick="window.location.href='mostrarusopromociones.php'">Ver uso de promociones</button>
+<body>
+    <div class="body-admin">
+        <div class="admin-menu">
+            <h1>Menú Dueño Local</h1>
+            <a href="ver_promociones.php" class="btn btn-success">
+                🎁 Ver Promociones
+            </a>
+            <a href="./cargar_promocion.php" class="btn btn-warning">
+                🎁 Cargar Promocion
+            </a>
+            <a href="mostrarusopromociones.php" class="btn btn-info">
+                📰 Ver uso de promociones
+            </a>
+            <a href="../perfil.php" class="btn btn-danger">
+                🛒 volver al perfil
+            </a>
         </div>
     </div>
+    <footer class="bg-dark text-white text-center py-3">
+        <?php include '../footer.php'; ?>
+    </footer>
 </body>
+
 </html>
