@@ -4,30 +4,25 @@ if (!isset($_COOKIE['token'])) {
     exit();
 }
 
-require_once '../../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta
+require_once '../../vendor/autoload.php'; 
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; // misma usada al generar el token
+$clave_secreta = "MESSI";
 
 try {
-    // Decodificar el token
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
 
-    // Extraer el tipo de usuario
     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    // Verificar si es dueño (id_tipo == 3)
     if ($id_tipo !== 3) {
         header("Location: ../../dashboard.php");
         exit();
     }
 
-    // Si pasó todas las verificaciones, mostrar la página normalmente
 } catch (Exception $e) {
-    // Token inválido o expirado
     header("Location: ../../login.php");
     exit();
 }
@@ -52,7 +47,7 @@ if (session_status() == PHP_SESSION_NONE) {
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.form-eliminar').forEach(function(form) {
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // evita envío inmediato
+            e.preventDefault(); 
             Swal.fire({
                 title: "¿Eliminar promoción?",
                 text: "Esta acción no se puede deshacer.",
@@ -118,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         echo '</div>';
                     }
 
-                    echo '</div>'; // Fin de la grilla
+                    echo '</div>'; 
                 } else {
                     echo '<div class="alert alert-warning">No hay promociones activas.</div>';
                 }

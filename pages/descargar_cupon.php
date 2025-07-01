@@ -7,25 +7,21 @@ use Firebase\JWT\Key;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 session_start();
-// Verificar que exista la cookie
+
 if (!isset($_COOKIE['token'])) {
     header("Location: login.php");
     exit();
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; // misma usada al generar el token
+$clave_secreta = "MESSI";
 
 try {
-    // Decodificar el token
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
 
-    // Extraer el tipo de usuario
     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    // Si pasó todas las verificaciones, mostrar la página normalmente
 } catch (Exception $e) {
-    // Token inválido o expirado
     header("Location: login.php");
     exit();
 }
@@ -41,7 +37,6 @@ $hasta = $_GET['hasta'] ?? '';
 $desdeFormateado = date('d/m/Y', strtotime($desde));
 $hastaFormateado = date('d/m/Y', strtotime($hasta));
 
-// Cargamos la plantilla PDF
 $pdf = new Fpdi();
 $pdf->AddPage();
 
@@ -49,17 +44,16 @@ $pageCount = $pdf->setSourceFile('../assets/cupon/cupon.pdf');
 $tpl = $pdf->importPage(1);
 $pdf->useTemplate($tpl);
 
-// Personalizamos datos
 $pdf->SetFont('Helvetica', '', 14);
 $pdf->SetTextColor(0, 0, 0);
 
-$pdf->StartTransform();                         // Iniciar transformación
-$pdf->Rotate(90, 45, 50);                       // (ángulo, x, y) → centro de rotación
-$pdf->SetFont('Helvetica', 'B', 16);            // B = negrita, 16 = tamaño
-$pdf->SetXY(20, 50);                            // Posición del texto
-$pdf->Write(0, "id: " . $idPromo);              // Escribir texto
-$pdf->StopTransform();                          // Finalizar transformación
-               // Finalizar transformación
+$pdf->StartTransform();                        
+$pdf->Rotate(90, 45, 50);                       
+$pdf->SetFont('Helvetica', 'B', 16);           
+$pdf->SetXY(20, 50);                           
+$pdf->Write(0, "id: " . $idPromo);              
+$pdf->StopTransform();                          
+               
 
 
 $pdf->SetXY(90, 55);
@@ -71,6 +65,5 @@ $pdf->Write(0, "Válida desde: " . $desdeFormateado);
 $pdf->SetXY(90, 77);
 $pdf->Write(0, "Hasta: " . $hastaFormateado);
 
-// ✅ Envía el PDF al navegador
 $pdf->Output('cupon_' . $idPromo . '.pdf', 'D');
 exit;

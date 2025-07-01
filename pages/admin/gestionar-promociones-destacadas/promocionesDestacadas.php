@@ -7,44 +7,35 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-// Verificar que exista la cookie
 if (!isset($_COOKIE['token'])) {
     header("Location: ../../login.php");
     exit();
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; // misma usada al generar el token
+$clave_secreta = "MESSI";
 
 try {
-    // Decodificar el token
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
 
-    // Extraer el tipo de usuario
     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    // Verificar si es admin (id_tipo == 1)
     if ($id_tipo !== 1) {
         header("Location: ../../dashboard.php");
         exit();
     }
 
-    // Si pasó todas las verificaciones, mostrar la página normalmente
 } catch (Exception $e) {
-    // Token inválido o expirado
     header("Location: ../../login.php");
     exit();
 }
 
-// Buscador
 $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
 
-// Paginación
 $porPagina = 6;
 $pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
 $inicio = ($pagina - 1) * $porPagina;
 
-// Procesar el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['destacadas'])) {
     $conn->query("UPDATE promociones SET destacada = 0");
     $seleccionadas = array_slice($_POST['destacadas'], 0, 3);
@@ -52,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['destacadas'])) {
         $in = implode(',', array_map('intval', $seleccionadas));
         $conn->query("UPDATE promociones SET destacada = 1 WHERE id IN ($in)");
     }
-    // Mantener búsqueda y página al volver
     $redir = 'promocionesDestacadas.php?mensaje=Promociones destacadas actualizadas';
     if ($busqueda !== '') $redir .= '&busqueda=' . urlencode($busqueda);
     if (isset($_GET['pagina'])) $redir .= '&pagina=' . intval($_GET['pagina']);
@@ -60,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['destacadas'])) {
     exit;
 }
 
-// Contar total de resultados para la búsqueda
 if ($busqueda !== '') {
     $sqlCount = "SELECT COUNT(*) FROM promociones WHERE textoPromo LIKE ?";
     $stmtCount = $conn->prepare($sqlCount);
@@ -115,7 +104,6 @@ $totalPaginas = ceil($totalPromos / $porPagina);
         <div class="alert alert-success"><?= htmlspecialchars($_GET['mensaje']) ?></div>
     <?php endif; ?>
 
-    <!-- Buscador -->
     <form class="mb-4" method="get" action="">
         <div class="input-group">
             <input type="text" class="form-control" name="busqueda" placeholder="Buscar promoción..." value="<?= htmlspecialchars($busqueda) ?>">
@@ -161,7 +149,6 @@ $totalPaginas = ceil($totalPromos / $porPagina);
         <button type="submit" class="btn btn-primary mt-3">Guardar destacadas</button>
     </form>
 
-    <!-- Paginación -->
     <nav aria-label="Paginación de promociones" class="mt-4">
         <ul class="pagination justify-content-center">
             <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>

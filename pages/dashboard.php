@@ -1,10 +1,8 @@
 <?php
 include '../include/db.php';
 
-// Obtener promociones destacadas
 $destacadas = $conn->query("SELECT textoPromo, fechaDesdePromo, fechaHastaPromo, rutaImagen FROM promociones WHERE destacada = 1 AND estadoPromo = 'aprobada' LIMIT 3");
 
-// Obtener novedades
 $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNovedad FROM novedades ORDER BY fechaDesdeNovedad DESC");
 ?>
 
@@ -78,10 +76,7 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
                             <div class="card mx-auto shadow-sm" style="max-width: 600px;">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= htmlspecialchars($novedad['textoNovedad']) ?></h5>
-                                    <!-- <p class="card-text">
-                                        <span class="badge bg-secondary">Desde: <?= date('d/m/Y', strtotime($novedad['fechaDesdeNovedad'])) ?></span>
-                                        <span class="badge bg-secondary">Hasta: <?= date('d/m/Y', strtotime($novedad['fechaHastaNovedad'])) ?></span>
-                                    </p> -->
+                                
                                 </div>
                             </div>
                         </div>

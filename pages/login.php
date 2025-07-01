@@ -2,11 +2,6 @@
 include '../include/db.php';
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// if (class_exists(JWT::class)) {
-//     echo "JWT cargado correctamente.";
-// } else {
-//     echo "JWT NO cargado.";
-// }
 
 use Firebase\JWT\JWT;
 
@@ -15,28 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 
-/*
-
-Tabla de usuarios para la base de datos (la base se llama dbweb)
-Si usas el login cambia la contraseña por la tuya y el puerto que uses vs
-
-'CREATE TABLE `usuarios` (
-  `idUser` int NOT NULL AUTO_INCREMENT,
-  `emailUser` varchar(50) NOT NULL,
-  `pasUser` varchar(255) DEFAULT NULL,
-  `tipoUser` varchar(15) NOT NULL,
-  `validado` tinyint(1) NOT NULL,
-  `fechaIngreso` date NOT NULL,
-  `categoriaUser` varchar(15) NOT NULL,
-  `aprobado` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`idUser`)
-) ;
-
-
-*/
-
-
-$error = '';  // Variable para almacenar el mensaje de error
+$error = '';  
 
 if (isset($_POST['submit'])) {
     $email = $_POST['email'] ?? '';
@@ -58,7 +32,6 @@ if (isset($_POST['submit'])) {
                 $_SESSION['idUser'] = $usuario['id'];
                 $_SESSION['emailUser'] = $usuario['emailUser'];
                 $_SESSION['tipoUser'] = $usuario['id_tipo'];
-                //$data = $stmt->fetch(PDO::FETCH_ASSOC);
                 $keys = 'MESSI';
                 $token = JWT::encode(
                     array(
@@ -107,7 +80,6 @@ if (isset($_POST['submit'])) {
                         <form id="login-form" class="form" action="" method="post">
                             <h3 class="text-center text-login">Iniciar sesion</h3>
                             
-                            <!-- Mostrar mensaje de error si existe -->
                             <?php if (!empty($error)) echo $error; ?>
 
                             <div class="form-group">

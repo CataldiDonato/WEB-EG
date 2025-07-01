@@ -67,7 +67,6 @@ if (isset($_POST['submit'])) {
         //
         if ($stmt->execute()) {
             try {
-                // Configuración del servidor
                 $mail->SMTPDebug = 2;
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
@@ -77,11 +76,9 @@ if (isset($_POST['submit'])) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port       = 587;
             
-                // Remitente y destinatario
                 $mail->setFrom('donatocataldicode@gmail.com', 'Nombre del Sitio');
                 $mail->addAddress($email); 
             
-                // Contenido
                 $mail->isHTML(true);
                 $mail->Subject = 'Valida tu cuenta';
                 $mail->Body    = "Hola,<br><br>Haz clic en el siguiente enlace para validar tu correo:<br><br>

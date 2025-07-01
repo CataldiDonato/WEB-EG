@@ -32,12 +32,10 @@ if (isset($_COOKIE['token'])) {
     <div class="container-fluid">
       <a class="navbar-brand" id="titleHeader" href="#">PASEO DEL SOL</a>
 
-      <!-- Botón hamburguesa en móvil -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Contenido de la navbar -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
@@ -49,19 +47,9 @@ if (isset($_COOKIE['token'])) {
           <li class="nav-item">
             <a class="nav-link" href="contacto.php" id="linkHeader">Contactanos</a>
           </li>
-          <!-- <li class="nav-item">
-          <a class="nav-link" href="novedades.php">Novedades</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="contacto.php">Contacto</a>
-        </li> -->
+  
         </ul>
 
-        <!-- Botones a la derecha -->
-        <!-- <div class="d-flex">
-        <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
-        <a href="register.php" class="btn btn-primary">Sign-up</a>
-      </div> -->
         <div class="d-flex">
           <?php if ($usuario_autenticado): ?>
             <a href="perfil.php" class="btn me-2 btn-success">Perfil</a>

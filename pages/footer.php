@@ -11,7 +11,6 @@
     <footer class="bg-dark text-light pt-4">
   <div class="container">
     <div class="row">
-      <!-- Red social -->
       <div class="col-md-4 mb-3">
         <h5>Redes Sociales</h5>
         <a href="https://instagram.com/" target="_blank" class="text-light me-3">
@@ -25,7 +24,6 @@
         </a>
       </div>
 
-      <!-- Mapa del sitio -->
       <div class="col-md-4 mb-3">
         <h5>Mapa del sitio</h5>
         <ul class="list-unstyled">
@@ -35,7 +33,6 @@
         </ul>
       </div>
 
-      <!-- Información adicional -->
       <div class="col-md-4 mb-3">
         <h5>Contacto</h5>
         <p>Email: admin@gmail.com</p>

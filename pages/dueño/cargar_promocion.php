@@ -6,31 +6,25 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-// Verificar que exista la cookie
 if (!isset($_COOKIE['token'])) {
     header("Location: ../login.php");
     exit();
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; // misma usada al generar el token
+$clave_secreta = "MESSI";
 
 try {
-    // Decodificar el token
+  
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
-
-    // Extraer el tipo de usuario
     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    // Verificar si es dueño (id_tipo == 3)
     if ($id_tipo !== 3) {
         header("Location: ../../dashboard.php");
         exit();
     }
 
-    // Si pasó todas las verificaciones, mostrar la página normalmente
 } catch (Exception $e) {
-    // Token inválido o expirado
     header("Location: ../../login.php");
     exit();
 }
@@ -111,7 +105,7 @@ if (isset($_POST['submit'])) {
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8"> <!-- Ajusta el tamaño según la pantalla -->
+            <div class="col-12 col-md-10 col-lg-8"> 
                 <h2 class="text-center mb-4">Cargar Promoción</h2>
                 <button class="btn btn-primary mb-3" onclick="location.href='menu-dueño.php'">Volver al menú</button>
                 <form id="cargarPromocion-form" class="form" action="" method="post" enctype="multipart/form-data">

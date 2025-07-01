@@ -1,6 +1,6 @@
 <?php
 include '../include/db.php';
-include 'header.php'; // Esto ya decodifica el JWT y setea $usuario_autenticado
+include 'header.php'; 
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -13,10 +13,18 @@ $porPagina = 9;
 $pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
 $inicio = ($pagina - 1) * $porPagina;
 
-// Si el usuario está autenticado, obtenemos sus datos del token
-if ($usuario_autenticado && isset($decoded)) {
+
+if ($usuario_autenticado && isset($decoded) ) {
     $idUsuario = $decoded->data->idUser ?? null;
-    // Consultar la categoría del usuario en la base de datos
+
+    $sqlemailverificado = "SELECT validado FROM users WHERE id = ?";
+    $stmtEmail = $conn->prepare($sqlemailverificado);
+    $stmtEmail->bind_param("i", $idUsuario);
+    $stmtEmail->execute();
+    $stmtEmail->bind_result($emailVerificado);
+    $stmtEmail->fetch();
+    $stmtEmail->close();
+
     if ($idUsuario) {
         $sqlCategoria = "SELECT idCategoria FROM users WHERE id = ?";
         $stmtCategoria = $conn->prepare($sqlCategoria);
@@ -27,7 +35,6 @@ if ($usuario_autenticado && isset($decoded)) {
         $stmtCategoria->close();
 
         if ($categoriaCliente) {
-            // Contar total de promociones
             $sqlCount = "SELECT COUNT(*) FROM promociones WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?";
             $stmtCount = $conn->prepare($sqlCount);
             $stmtCount->bind_param("i", $categoriaCliente);
@@ -38,7 +45,6 @@ if ($usuario_autenticado && isset($decoded)) {
 
             $totalPaginas = max(1, ceil($totalPromos / $porPagina));
 
-            // Obtener promociones de la página actual
             $sqlPromo = "SELECT promociones.*, locales.nombreLocal FROM promociones 
                         INNER JOIN locales ON promociones.idcodLocal = locales.id 
                         WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?
@@ -68,7 +74,14 @@ if ($usuario_autenticado && isset($decoded)) {
     <div class="container mt-4">
         <h2 class="mb-4">Promociones activas</h2>
         <div class="row">
-            <?php if ($usuario_autenticado && $promos && $promos->num_rows > 0): ?>
+
+            <?php if ($usuario_autenticado && !$emailVerificado): ?>
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center">
+                            Debes verificar tu correo electrónico para ver las promociones.
+                        </div>
+                    </div>
+            <?php elseif ($usuario_autenticado && $promos && $promos->num_rows > 0): ?>
                 <?php while ($promo = $promos->fetch_assoc()): ?>
                     <div class="col-md-4 mb-4">
                         <div class="d-flex align-items-center h-100">
