@@ -1,5 +1,8 @@
 <?php
+
+
 include '../include/db.php';
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 
@@ -9,8 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-
-$error = '';  
+$error = ''; 
 
 if (isset($_POST['submit'])) {
     $email = $_POST['email'] ?? '';
@@ -32,6 +34,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['idUser'] = $usuario['id'];
                 $_SESSION['emailUser'] = $usuario['emailUser'];
                 $_SESSION['tipoUser'] = $usuario['id_tipo'];
+             
                 $keys = 'MESSI';
                 $token = JWT::encode(
                     array(
@@ -79,6 +82,7 @@ if (isset($_POST['submit'])) {
                     <div id="login-box" class="col-md-12">
                         <form id="login-form" class="form" action="" method="post">
                             <h3 class="text-center text-login">Iniciar sesion</h3>
+                            
                             
                             <?php if (!empty($error)) echo $error; ?>
 

@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include '../include/db.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -67,6 +71,7 @@ if (isset($_POST['submit'])) {
         //
         if ($stmt->execute()) {
             try {
+                // Configuración del servidor
                 $mail->SMTPDebug = 2;
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
@@ -76,13 +81,15 @@ if (isset($_POST['submit'])) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port       = 587;
             
+                // Remitente y destinatario
                 $mail->setFrom('donatocataldicode@gmail.com', 'Nombre del Sitio');
                 $mail->addAddress($email); 
             
+                // Contenido
                 $mail->isHTML(true);
                 $mail->Subject = 'Valida tu cuenta';
                 $mail->Body    = "Hola,<br><br>Haz clic en el siguiente enlace para validar tu correo:<br><br>
-                                <a href='http://localhost/web-eg/pages/validarEmail.php?email=$email&token=$tokenValidacionCorreo'>
+                                <a href='http://shoppingdelsol.techphite.com/pages/validarEmail.php?email=$email&token=$tokenValidacionCorreo'>
                                 Validar cuenta</a>";
             
                 $mail->send();

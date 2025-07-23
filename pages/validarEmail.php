@@ -1,23 +1,5 @@
 <?php
 
-if (!isset($_COOKIE['token'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; 
-
-try {
-    
-    $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
-
-    $id_tipo = $decoded->data->id_tipo ?? null;
-} catch (Exception $e) {
-    header("Location: login.php");
-    exit();
-}
-
 include '../include/db.php';
 
 $email = $_GET['email'] ?? '';

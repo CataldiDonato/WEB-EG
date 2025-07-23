@@ -1,4 +1,8 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 include '../include/db.php';
 
 $destacadas = $conn->query("SELECT textoPromo, fechaDesdePromo, fechaHastaPromo, rutaImagen FROM promociones WHERE destacada = 1 AND estadoPromo = 'aprobada' LIMIT 3");
@@ -27,6 +31,11 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
     position: relative;
     margin-top: -56px;
     }
+    @media (max-width: 768px) {
+    .hero-image {
+        height: 50vh;
+    }
+}
   </style>
 </head>
 <body>
@@ -76,7 +85,7 @@ $novedades = $conn->query("SELECT textoNovedad, fechaDesdeNovedad, fechaHastaNov
                             <div class="card mx-auto shadow-sm" style="max-width: 600px;">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= htmlspecialchars($novedad['textoNovedad']) ?></h5>
-                                
+                            
                                 </div>
                             </div>
                         </div>

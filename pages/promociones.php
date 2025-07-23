@@ -1,7 +1,6 @@
 <?php
 include '../include/db.php';
 include 'header.php'; 
-
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -12,6 +11,7 @@ $totalPaginas = 1;
 $porPagina = 9;
 $pagina = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
 $inicio = ($pagina - 1) * $porPagina;
+
 
 
 if ($usuario_autenticado && isset($decoded) ) {
@@ -25,6 +25,7 @@ if ($usuario_autenticado && isset($decoded) ) {
     $stmtEmail->fetch();
     $stmtEmail->close();
 
+
     if ($idUsuario) {
         $sqlCategoria = "SELECT idCategoria FROM users WHERE id = ?";
         $stmtCategoria = $conn->prepare($sqlCategoria);
@@ -35,6 +36,7 @@ if ($usuario_autenticado && isset($decoded) ) {
         $stmtCategoria->close();
 
         if ($categoriaCliente) {
+
             $sqlCount = "SELECT COUNT(*) FROM promociones WHERE estadoPromo = 'aprobada' AND promociones.idCategoriaCliente <= ?";
             $stmtCount = $conn->prepare($sqlCount);
             $stmtCount->bind_param("i", $categoriaCliente);
@@ -83,45 +85,47 @@ if ($usuario_autenticado && isset($decoded) ) {
                     </div>
             <?php elseif ($usuario_autenticado && $promos && $promos->num_rows > 0): ?>
                 <?php while ($promo = $promos->fetch_assoc()): ?>
-                    <div class="col-md-4 mb-4">
-                        <div class="d-flex align-items-center h-100">
-                            <div class="card w-80">
-                                <?php
-                                $rutaImagen = !empty($promo['rutaImagen']) ? '../'. $promo['rutaImagen'] : '../assets/img/default.jpg';
-                                $yaComprada = false;
-                                if ($idUsuario) {
-                                    $sqlCheck = "SELECT id FROM usopromociones WHERE codPromo = ? AND idUsuario = ?";
-                                    $stmtCheck = $conn->prepare($sqlCheck);
-                                    $stmtCheck->bind_param("ii", $promo['id'], $idUsuario);
-                                    $stmtCheck->execute();
-                                    $stmtCheck->store_result();
-                                    $yaComprada = $stmtCheck->num_rows > 0;
-                                    $stmtCheck->close();
-                                }
-                                ?>
-                                <img src="<?= htmlspecialchars($rutaImagen) ?>" class="card-img-top" alt="Imagen promoción">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?= htmlspecialchars($promo['textoPromo']) ?></h5>
-                                    <p class="card-text">
-                                        <strong>Local:</strong> <?= htmlspecialchars($promo['nombreLocal']) ?><br>
-                                        <strong>Desde:</strong> <?= htmlspecialchars($promo['fechaDesdePromo']) ?><br>
-                                        <strong>Hasta:</strong> <?= htmlspecialchars($promo['fechaHastaPromo']) ?><br>
-                                        <strong>Días:</strong> <?= htmlspecialchars($promo['diasSemana']) ?>
-                                    </p>
-                                    <?php if (!$yaComprada): ?>
-                                        <form action="comprar_promo.php" method="post" class="mt-3">
-                                            <input type="hidden" name="codPromo" value="<?= $promo['id'] ?>">
-                                            <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
-                                            <input type="hidden" name="estado" value="pendiente">
-                                            <button type="submit" class="btn btn-success w-100">Comprar</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <div class="alert alert-secondary mt-3 text-center">Ya compraste esta promoción</div>
-                                    <?php endif; ?>
+                    <?php if(strtotime($promo['fechaHastaPromo'])<date()): ?> //---------------------------------------------------------------------------------------------------------------------
+                        <div class="col-md-4 mb-4">
+                            <div class="d-flex align-items-center h-100">
+                                <div class="card w-80">
+                                    <?php
+                                    $rutaImagen = !empty($promo['rutaImagen']) ? '../'. $promo['rutaImagen'] : '../assets/img/default.jpg';
+                                    $yaComprada = false;
+                                    if ($idUsuario) {
+                                        $sqlCheck = "SELECT id FROM usopromociones WHERE codPromo = ? AND idUsuario = ?";
+                                        $stmtCheck = $conn->prepare($sqlCheck);
+                                        $stmtCheck->bind_param("ii", $promo['id'], $idUsuario);
+                                        $stmtCheck->execute();
+                                        $stmtCheck->store_result();
+                                        $yaComprada = $stmtCheck->num_rows > 0;
+                                        $stmtCheck->close();
+                                    }
+                                    ?>
+                                    <img src="<?= htmlspecialchars($rutaImagen) ?>" class="card-img-top" alt="Imagen promoción">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= htmlspecialchars($promo['textoPromo']) ?></h5>
+                                        <p class="card-text">
+                                            <strong>Local:</strong> <?= htmlspecialchars($promo['nombreLocal']) ?><br>
+                                            <strong>Desde:</strong> <?= htmlspecialchars($promo['fechaDesdePromo']) ?><br>
+                                            <strong>Hasta:</strong> <?= htmlspecialchars($promo['fechaHastaPromo']) ?><br>
+                                            <strong>Días:</strong> <?= htmlspecialchars($promo['diasSemana']) ?>
+                                        </p>
+                                        <?php if (!$yaComprada): ?>
+                                            <form action="comprar_promo.php" method="post" class="mt-3">
+                                                <input type="hidden" name="codPromo" value="<?= $promo['id'] ?>">
+                                                <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
+                                                <input type="hidden" name="estado" value="pendiente">
+                                                <button type="submit" class="btn btn-success w-100">Comprar</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <div class="alert alert-secondary mt-3 text-center">Ya compraste esta promoción</div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 <?php endwhile; ?>
             <?php elseif ($usuario_autenticado): ?>
                 <div class="col-12">

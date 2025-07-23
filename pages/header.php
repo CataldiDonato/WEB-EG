@@ -25,6 +25,22 @@ if (isset($_COOKIE['token'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title></title>
   <link rel="stylesheet" href="../assets/css/style-header.css">
+  <style>
+@media (max-width: 768px) {
+  .navbar-nav {
+    flex-direction: column !important;
+    align-items: center;
+  }
+  .navbar-nav .nav-item {
+    margin: 10px 0;
+  }
+  .navbar-nav .nav-link {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -32,10 +48,12 @@ if (isset($_COOKIE['token'])) {
     <div class="container-fluid">
       <a class="navbar-brand" id="titleHeader" href="#">PASEO DEL SOL</a>
 
+       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
+     
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
@@ -47,9 +65,10 @@ if (isset($_COOKIE['token'])) {
           <li class="nav-item">
             <a class="nav-link" href="contacto.php" id="linkHeader">Contactanos</a>
           </li>
-  
+         
         </ul>
 
+        
         <div class="d-flex">
           <?php if ($usuario_autenticado): ?>
             <a href="perfil.php" class="btn me-2 btn-success">Perfil</a>
@@ -65,3 +84,4 @@ if (isset($_COOKIE['token'])) {
 </body>
 
 </html>
+

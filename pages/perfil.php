@@ -1,10 +1,15 @@
 <?php
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL);
+
 include '../include/db.php';
 session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
 
 if (!isset($_COOKIE['token'])) {
     header("Location: login.php");
@@ -15,11 +20,15 @@ $token = $_COOKIE['token'];
 $clave_secreta = "MESSI"; 
 
 try {
+
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
+
 
     $id_tipo = $decoded->data->id_tipo ?? null;
 
+    
 } catch (Exception $e) {
+  
     header("Location: login.php");
     exit();
 }
