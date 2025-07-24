@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['idUser'] = $usuario['id'];
                 $_SESSION['emailUser'] = $usuario['emailUser'];
                 $_SESSION['tipoUser'] = $usuario['id_tipo'];
-                $keys = 'MESSI';
+                $keys = $_ENV['CLAVE']; 
                 $token = JWT::encode(
                     array(
                         'iat' => time(),
@@ -97,8 +97,14 @@ if (isset($_POST['submit'])) {
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" name="submit" class="buton-login btn btn-block" value="Iniciar sesión" style="border-radius: 5px; background-color: rgba(226,226,226);">
-                                <a href="register.php" class="text-login link-register">¿Aún no te has registrado? Registrate aquí.</a>
+                                <div>
+                                    <input type="submit" name="submit" class="buton-login btn btn-block" value="Iniciar sesión" style="border-radius: 5px; background-color: rgba(226,226,226);">
+                                    <a href="register.php" class="text-login link-register">¿Aún no te has registrado? Registrate aquí.</a>
+                                </div>
+                                <div>
+                                    <input type="submit" name="olvidecontraseña" class="buton-login btn btn-block" value="olvidecontraseña" style="border-radius: 5px; background-color: rgba(226,226,226);">
+                                    <a href="olvidecontraseña.php" class="text-login link-register">¿Olvidaste tu contraseña?</a>
+                                </div>
                             </div>
                         </form>
                     </div>

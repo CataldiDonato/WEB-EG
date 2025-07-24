@@ -12,7 +12,7 @@ if (!isset($_COOKIE['token'])) {
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI";
+$clave_secreta = $_ENV['CLAVE']; 
 
 try {
   

@@ -7,7 +7,7 @@ require '../vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-$key = 'MESSI';
+$key = $_ENV['CLAVE']; 
 if (isset($_COOKIE['token'])) {
   $token = $_COOKIE['token'];
   $decoded = JWT::decode($token, new Key($key, 'HS256'));

@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1); 
+//ini_set('display_errors', 1); 
 ini_set('display_startup_errors', 1); 
 error_reporting(E_ALL);
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -17,7 +17,9 @@ if (!isset($_COOKIE['token'])) {
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; 
+$clave_secreta = $_ENV['CLAVE']; 
+
+
 
 try {
 

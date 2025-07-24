@@ -12,7 +12,7 @@ if (!isset($_COOKIE['token'])) {
 }
 
 $token = $_COOKIE['token'];
-$clave_secreta = "MESSI"; // misma usada al generar el token
+$clave_secreta = $_ENV['CLAVE']; 
 
 try {
     // Decodificar el token
