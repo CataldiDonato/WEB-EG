@@ -85,7 +85,7 @@ if ($usuario_autenticado && isset($decoded) ) {
                     </div>
             <?php elseif ($usuario_autenticado && $promos && $promos->num_rows > 0): ?>
                 <?php while ($promo = $promos->fetch_assoc()): ?>
-                    <?php if(strtotime($promo['fechaHastaPromo'])<date()): ?> //---------------------------------------------------------------------------------------------------------------------
+                    <?php if(strtotime($promo['fechaHastaPromo'])<time()): ?> 
                         <div class="col-md-4 mb-4">
                             <div class="d-flex align-items-center h-100">
                                 <div class="card w-80">
@@ -125,7 +125,7 @@ if ($usuario_autenticado && isset($decoded) ) {
                                 </div>
                             </div>
                         </div>
-                    <?php endif; ?>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    <?php endif; ?>
                 <?php endwhile; ?>
             <?php elseif ($usuario_autenticado): ?>
                 <div class="col-12">

@@ -1,32 +1,33 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
+include 'validarjwtdueño.php';
 
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-if (!isset($_COOKIE['token'])) {
-    header("Location: ../login.php");
-    exit();
-}
+// if (!isset($_COOKIE['token'])) {
+//     header("Location: ../login.php");
+//     exit();
+// }
 
-$token = $_COOKIE['token'];
-$clave_secreta = $_ENV['CLAVE']; 
+// $token = $_COOKIE['token'];
+// $clave_secreta = $_ENV['CLAVE']; 
 
-try {
-    $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
+// try {
+//     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
 
-    $id_tipo = $decoded->data->id_tipo ?? null;
+//     $id_tipo = $decoded->data->id_tipo ?? null;
 
-    if ($id_tipo !== 3) {
-        header("Location: ../dashboard.php");
-        exit();
-    }
+//     if ($id_tipo !== 3) {
+//         header("Location: ../dashboard.php");
+//         exit();
+//     }
 
-} catch (Exception $e) {
-    header("Location: login.php");
-    exit();
-}
+// } catch (Exception $e) {
+//     header("Location: login.php");
+//     exit();
+// }
 ?>
 <!DOCTYPE html>
 <html lang="es">

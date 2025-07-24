@@ -19,8 +19,6 @@ if (!isset($_COOKIE['token'])) {
 $token = $_COOKIE['token'];
 $clave_secreta = $_ENV['CLAVE']; 
 
-
-
 try {
 
     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
