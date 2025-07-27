@@ -3,95 +3,73 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 include 'validarjwtdueño.php';
 
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
-// if (!isset($_COOKIE['token'])) {
-//     header("Location: ../login.php");
-//     exit();
-// }
-
-// $token = $_COOKIE['token'];
-// $clave_secreta = $_ENV['CLAVE']; 
-
-// try {
-  
-//     $decoded = JWT::decode($token, new Key($clave_secreta, 'HS256'));
-//     $id_tipo = $decoded->data->id_tipo ?? null;
-
-//     if ($id_tipo !== 3) {
-//         header("Location: ../../dashboard.php");
-//         exit();
-//     }
-
-// } catch (Exception $e) {
-//     header("Location: ../../login.php");
-//     exit();
-// }
-
 include '../../include/db.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 if (isset($_POST['submit'])) {
-    $textoPromo = $_POST['descripcionPromocion'] ?? '';
-    $fechaDesdePromo = $_POST['diaComienzaPromocion'] ?? '';
-    $fechaHastaPromo = $_POST['diaTerminaPromocion'] ?? '';
-    $categoriaCliente = $_POST['categoriaCliente'] ?? '';
-    $diasSemana = $_POST['diasSemana'] ?? [];
-    $diasSemanaString = implode(',', $diasSemana);
-    $estPromo = "pendiente";
+    if ( (strtotime($_POST['diaComienzaPromocion']) > time())  && 
+         (strtotime($_POST['diaTerminaPromocion']) > strtotime($_POST['diaComienzaPromocion'] )) ) {
+        $textoPromo = $_POST['descripcionPromocion'] ?? '';
+        $fechaDesdePromo = $_POST['diaComienzaPromocion'] ?? '';
+        $fechaHastaPromo = $_POST['diaTerminaPromocion'] ?? '';
+        $categoriaCliente = $_POST['categoriaCliente'] ?? '';
+        $diasSemana = $_POST['diasSemana'] ?? [];
+        $diasSemanaString = implode(',', $diasSemana);
+        $estPromo = "pendiente";
 
-    $sql_check = "SELECT * FROM locales WHERE codUsuario = ?";
-    $stmt = $conn->prepare($sql_check);
-    $stmt->bind_param("i", $_SESSION['idUser']);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-    $fila = $resultado->fetch_assoc();
+        $sql_check = "SELECT * FROM locales WHERE codUsuario = ?";
+        $stmt = $conn->prepare($sql_check);
+        $stmt->bind_param("i", $_SESSION['idUser']);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $fila = $resultado->fetch_assoc();
 
-    if (!$fila) {
-        header("Location: cargar_promocion.php?error=No se encontró un local asociado a este usuario.");
-        exit;
-    }
-
-    $codLocalDueño = $fila['id'];
-
-    $rutaCarpeta = __DIR__ . '/../../assets/img/';
-    if (!is_dir($rutaCarpeta)) {
-        mkdir($rutaCarpeta, 0777, true);
-    }
-    $nombreArchivo = time() . '_' . basename($_FILES['imagen']['name']);
-    $rutaImagenAbsoluta = $rutaCarpeta . $nombreArchivo;
-    $rutaImagenWeb = 'assets/img/' . $nombreArchivo;
-
-    $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
-    if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
-        if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagenAbsoluta)) {
-            header("Location: cargar_promocion.php?error=Error al subir la imagen.");
+        if (!$fila) {
+            header("Location: cargar_promocion.php?error=No se encontró un local asociado a este usuario.");
             exit;
         }
-    } else {
-        header("Location: cargar_promocion.php?error=Formato de imagen no permitido.");
-        exit;
-    }
 
-    if (empty($textoPromo) || empty($fechaDesdePromo) || empty($fechaHastaPromo) || empty($categoriaCliente)) {
-        header("Location: cargar_promocion.php?error=Por favor, complete todos los campos.");
-        exit;
-    } else {
-        $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagenWeb);
+        $codLocalDueño = $fila['id'];
 
-        if ($stmt->execute()) {
-            header("Location: cargar_promocion.php?promo=ok");
-            exit();
-        } else {
-            header("Location: cargar_promocion.php?error=" . urlencode($conn->error));
-            exit();
+        $rutaCarpeta = __DIR__ . '/../../assets/img/';
+        if (!is_dir($rutaCarpeta)) {
+            mkdir($rutaCarpeta, 0777, true);
         }
+        $nombreArchivo = time() . '_' . basename($_FILES['imagen']['name']);
+        $rutaImagenAbsoluta = $rutaCarpeta . $nombreArchivo;
+        $rutaImagenWeb = 'assets/img/' . $nombreArchivo;
+
+        $tipoPermitido = ['image/jpeg', 'image/png', 'image/gif'];
+        if (in_array($_FILES['imagen']['type'], $tipoPermitido)) {
+            if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagenAbsoluta)) {
+                header("Location: cargar_promocion.php?error=Error al subir la imagen.");
+                exit;
+            }
+        } else {
+            header("Location: cargar_promocion.php?error=Formato de imagen no permitido.");
+            exit;
+        }
+
+        if (empty($textoPromo) || empty($fechaDesdePromo) || empty($fechaHastaPromo) || empty($categoriaCliente)) {
+            header("Location: cargar_promocion.php?error=Por favor, complete todos los campos.");
+            exit;
+        } else {
+            $sql = "INSERT INTO promociones (textoPromo, fechaDesdePromo, fechaHastaPromo, idCategoriaCliente, diasSemana, estadoPromo, idcodLocal, rutaImagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssssis", $textoPromo, $fechaDesdePromo, $fechaHastaPromo, $categoriaCliente, $diasSemanaString, $estPromo, $codLocalDueño, $rutaImagenWeb);
+
+            if ($stmt->execute()) {
+                header("Location: cargar_promocion.php?promo=ok");
+                exit();
+            } else {
+                header("Location: cargar_promocion.php?error=" . urlencode($conn->error));
+                exit();
+            }
+        }
+    }else{
+        $error = '<div class="alert alert-danger">Por favor, complete todos los campos.</div>';
     }
 }
 ?>
