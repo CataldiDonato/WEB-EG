@@ -52,6 +52,9 @@ use Firebase\JWT\Key;
                 🎁 Cargar Promocion
             </a>
             <a href="mostrarusopromociones.php" class="btn btn-info">
+                ✅ Aprobar uso de promocion
+            </a>
+            <a href="imprimirpromociones.php" class="btn btn-info">
                 📰 Ver uso de promociones
             </a>
             <a href="../perfil.php" class="btn btn-danger">

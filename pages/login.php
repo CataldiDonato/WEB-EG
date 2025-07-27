@@ -102,7 +102,6 @@ if (isset($_POST['submit'])) {
                                     <a href="register.php" class="text-login link-register">¿Aún no te has registrado? Registrate aquí.</a>
                                 </div>
                                 <div>
-                                    <input type="submit" name="olvidecontraseña" class="buton-login btn btn-block" value="olvidecontraseña" style="border-radius: 5px; background-color: rgba(226,226,226);">
                                     <a href="olvidecontraseña.php" class="text-login link-register">¿Olvidaste tu contraseña?</a>
                                 </div>
                             </div>
